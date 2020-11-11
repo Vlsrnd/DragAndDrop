@@ -23,6 +23,7 @@ body {
 
     font-family: monospace;
     text-transform: uppercase;
+    user-select: none;
 
     position: absolute;
 }

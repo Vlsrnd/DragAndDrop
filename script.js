@@ -12,8 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('mousedown', (event) => {
   // firstElement.textContent = (event.clientX + '   ' + event.clientY);
-  createElement(event.target);
-}, {once: true})
+  if (event.target.dataset.name !== 'element') return;
+  const tempElem = moveElement(createElement(event.target), event.clientX, event.clientY);
+  // document.addEventListener('mousemove', (mouseMoveEvent) => {
+  //   moveElement(tempElem, mouseMoveEvent.clientX, mouseMoveEvent.clientY);
+  // }, {once: true})
+})
 
 function createElement(obj) {
   const newElement = document.createElement('div');
@@ -22,7 +26,9 @@ function createElement(obj) {
   container.append(newElement);
   return newElement;
 }
+
 function moveElement(elem, x, y) {
   elem.style.top = y - elem.clientHeight / 2 + 'px';
   elem.style.left = x - elem.clientWidth / 2 + 'px';
+  return elem;
 }
