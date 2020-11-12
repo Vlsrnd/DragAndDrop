@@ -30,25 +30,37 @@ body {
 
   position: absolute;
 }
-.elements__edit {
+
+.elements__btn {
   position: absolute;
-  width: 16px;
-  top: -16px;
   right: -8px;
+  width: 16px;
   font-size: 16px;
   line-height: 16px;
   border-radius: 50%;
-  background-color: #808000;
   color: #000;
   opacity: .4;
   cursor: pointer;
 }
-.elements__edit:hover {
+.elements__btn:hover {
   opacity: 1;
+}
+
+.elements__edit {
+  background-color: #808000;
+  top: -10px;
+}
+.elements__move {
+  cursor: move;
+}
+.elements__remove {
+  background-color: hsl(0, 100%, 30%);
+  bottom: -10px;
 }
 
 .input {
   border: none;
+  text-align: center;
 }
 
 .hide {
