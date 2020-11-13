@@ -1,6 +1,8 @@
 'use strict';
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
+const w = document.documentElement.clientWidth;
+const h = document.documentElement.clientHeight;
 let moveTempElement;
 
 //////////////////////////////////////////////////
@@ -15,12 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //moving by holding the element
 //start moving
-document.addEventListener('mousedown', (event) => {
+document.addEventListener('mousedown', event => {
   if (event.target.dataset.name === 'element') {
     //bind function moveElement
     const tempElem = moveElement( appendElement( createElement(event.target), drawArea ), event );
-    moveTempElement = curryMoveElementFunc(tempElem);
+    moveTempElement = curryMoveElementFunc(moveElement, tempElem);
 //moving
+    document.addEventListener('mousemove', moveTempElement);
+  }
+})
+//moving by holding the handle-move button
+document.addEventListener('mousedown', event => {
+  if (event.target.dataset.func === 'move') {
+    //bind function moveElement
+    const tempElem = moveElementByBtn( event.target.parentNode, event);
+    moveTempElement = curryMoveElementFunc(moveElementByBtn, tempElem);
+    //moving
     document.addEventListener('mousemove', moveTempElement);
   }
 })
@@ -28,6 +40,7 @@ document.addEventListener('mousedown', (event) => {
 document.addEventListener('mouseup', (event) => {
   document.removeEventListener('mousemove', moveTempElement);
 })
+
 
 //editing the text into element
 document.addEventListener('click', event => {
@@ -43,9 +56,11 @@ document.addEventListener('click', event => {
         event.target.removeEventListener('keydown', forListenerKeydown);
       }
     }
+
     event.target.nextElementSibling.addEventListener('keydown', forListenerKeydown)
   }
 })
+
 //removing the element
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'remove') {
@@ -74,6 +89,7 @@ function createElement(obj) {
                                 + '<div class="element__btn element__move" data-func="move">&#9995;</div>');
   return newElement;
 }
+
 //I/O = element / element
 function appendElement(element, place) {
   place.append(element);
@@ -87,8 +103,17 @@ function moveElement(element, event) {
   return element;
 }
 
+//I/O = element / element
+function moveElementByBtn (element, event) {
+  element.style.top = event.clientY - element.clientHeight / 2 + 'px';
+  element.style.left = event.clientX - element.clientWidth + 'px';
+  if (parseInt(element.style.top) < 0) element.style.top = 0 + 'px';
+  if (parseInt(element.style.left) < 0) element.style.left = 0 + 'px';
+  return element;
+}
+
 //I/O = element / curry function moveElement(event) binded with element
-function curryMoveElementFunc (elem) {
-  return event => moveElement(elem, event);
+function curryMoveElementFunc (func, elem) {
+  return event => func(elem, event);
 }
 
