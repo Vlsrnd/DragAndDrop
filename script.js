@@ -5,7 +5,14 @@ const w = document.documentElement.clientWidth;
 const h = document.documentElement.clientHeight;
 let moveTempElement;
 const elements = [
-  
+  element00: {
+    id: 0,
+    value: 'first',
+    parent: null,
+    children: null,
+    coordX: null,
+    coordY: null,
+  }
 ]
 
 //////////////////////////////////////////////////
