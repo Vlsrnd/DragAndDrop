@@ -4,16 +4,28 @@ const drawArea = document.querySelector('.draw-area');
 const w = document.documentElement.clientWidth;
 const h = document.documentElement.clientHeight;
 let moveTempElement;
-const elements = [
-  element00: {
-    id: 0,
-    value: 'first',
-    parent: null,
-    children: null,
-    coordX: null,
-    coordY: null,
-  }
-]
+
+const elements = new Map();
+/*
+Example
+structure for element  {
+  id: (Number) element.dataset.id,
+  value: (String) element.textContent,
+  parent: (Object) element from which the current element follows,
+  children: (Array(Object)) elements that follow from the current element
+  coordX: (Number),
+  coordY: (Number)
+}
+*/
+elements.set(firstElement, {
+                            id: 0,
+                            value: 'first',
+                            parent: null,
+                            children: [],
+                            coordX: null,
+                            coordY: null,
+                           })
+
 
 //////////////////////////////////////////////////
 /////////////////////Listeners////////////////////
@@ -127,3 +139,15 @@ function curryMoveElementFunc (func, elem) {
   return event => func(elem, event);
 }
 
+//I/O = element, object {,[id: Number, value: String, parent: Object, children: Object, 
+// coordX: Number, coordY: Number]} / output: Object
+function savePropertiesOfElement(elem, properties = {}) {
+  for (let prop in properties) {
+    if (prop === 'children') {
+      elements.get(elem)[prop].push(properties[prop]);  
+    } else {
+      elements.get(elem)[prop] = properties[prop];
+    }
+  }
+  return elements.get(elem);
+}
