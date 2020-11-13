@@ -147,8 +147,8 @@ function addElemToElementsCollection(elem) {
     value: elem.textContent,
     parent: null,
     children: [],
-    coordX: parseInt(elem.left) + elem.clientWidth / 2,
-    coordY: parseInt(elem.top) + elem.clientHeight / 2,
+    coordX: parseInt(elem.offsetLeft) + elem.clientWidth / 2,
+    coordY: parseInt(elem.offsetTop) + elem.clientHeight / 2,
   })
   return elem
 }
