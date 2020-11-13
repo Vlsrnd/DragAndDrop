@@ -1,62 +1,35 @@
+'use strict';
 const firstElement = document.querySelector('#firstElement');
-const container = document.querySelector('.container');
-const inputText = document.querySelector('.input-text');
+const drawArea = document.querySelector('.draw-area');
+let moveTempElement;
 
+//////////////////////////////////////////////////
+/////////////////////Listeners////////////////////
+//////////////////////////////////////////////////
 
-let moveTempElement, moveBtnElement;
 //firstElement move to the center of screen
 document.addEventListener('DOMContentLoaded', () => {
-  moveElement(firstElement, {clientX: document.documentElement.clientWidth / 2,
-                             clientY: document.documentElement.clientHeight / 2});
+  moveElement(firstElement, {clientX: drawArea.getBoundingClientRect().left + drawArea.clientWidth / 2,
+                             clientY: drawArea.getBoundingClientRect().top + drawArea.clientHeight / 2});
 }, {once: true})
 
-
+//moving by holding the element
+//start moving
 document.addEventListener('mousedown', (event) => {
   if (event.target.dataset.name === 'element') {
     //bind function moveElement
-    const tempElem = moveElement(createElement(event.target), event);
-    const bindMoveElement = elem => event => moveElement(elem, event);
-    moveTempElement = bindMoveElement(tempElem);
-
+    const tempElem = moveElement( appendElement( createElement(event.target), drawArea ), event );
+    moveTempElement = curryMoveElementFunc(tempElem);
+//moving
     document.addEventListener('mousemove', moveTempElement);
-  } else if (event.target.dataset.func === 'move') {
-    //перемещение
-    //так не получилось
-    // const bindMoveBtnElement = elem => event => moveElement(elem, event);
-    // moveBtnElement = bindMoveBtnElement(event.parentNode);
-
-    // document.addEventListener('mousemove', moveBtnElement);
-    // сделать перемещение за кнопку
-    console.log(event.target);
   }
 })
-//Заканчиваем перемещение
+//end moving
 document.addEventListener('mouseup', (event) => {
-  if (event.target.dataset.name !== 'element') return;
   document.removeEventListener('mousemove', moveTempElement);
 })
 
-function createElement(obj) {
-  const newElement = document.createElement('div');
-  newElement.classList.add('elements');
-  newElement.textContent = 'New';
-  newElement.dataset.id = ++obj.dataset.id;
-  newElement.dataset.name = 'element';
-  newElement.insertAdjacentHTML('beforeend', '<div class="elements__btn elements__edit" data-func="edit">&#9998;</div>'
-                                + '<input class="input hide" type="text"></input>'
-                                + '<div class="elements__btn elements__remove" data-func="remove">&#10008;</div>'
-                                + '<div class="elements__btn elements__move" data-func="move">&#9995;</div>');
-  container.append(newElement);
-  console.log(newElement)
-  return newElement;
-}
-
-function moveElement(elem, event) {
-  elem.style.top = event.clientY - elem.clientHeight / 2 + 'px';
-  elem.style.left = event.clientX - elem.clientWidth / 2 + 'px';
-  return elem;
-}
-
+//editing the text into element
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'edit') {
     event.target.previousSibling.textContent = '';
@@ -71,8 +44,51 @@ document.addEventListener('click', event => {
       }
     }
     event.target.nextElementSibling.addEventListener('keydown', forListenerKeydown)
-  } else if (event.target.dataset.func === 'remove') {
-    if (document.querySelectorAll('.elements').length <= 1) return;
+  }
+})
+//removing the element
+document.addEventListener('click', event => {
+  if (event.target.dataset.func === 'remove') {
+    //if there is one element on board, break
+    //need to change this condition when I'll add setting with count of elements
+    if (document.querySelectorAll('.element').length <= 1) return;
     event.target.parentNode.remove();
   }
 })
+
+
+//////////////////////////////////////////////////
+/////////////////////Functions////////////////////
+//////////////////////////////////////////////////
+
+//I/O = obj with current id / div with ++id and structure
+function createElement(obj) {
+  const newElement = document.createElement('div');
+  newElement.classList.add('element');
+  newElement.textContent = 'New';
+  newElement.dataset.id = ++obj.dataset.id;
+  newElement.dataset.name = 'element';
+  newElement.insertAdjacentHTML('beforeend', '<div class="element__btn element__edit" data-func="edit">&#9998;</div>'
+                                + '<input class="input hide" type="text"></input>'
+                                + '<div class="element__btn element__remove" data-func="remove">&#10008;</div>'
+                                + '<div class="element__btn element__move" data-func="move">&#9995;</div>');
+  return newElement;
+}
+//I/O = element / element
+function appendElement(element, place) {
+  place.append(element);
+  return element
+}
+
+//I/O = element / element
+function moveElement(element, event) {
+  element.style.top = event.clientY - element.clientHeight / 2 + 'px';
+  element.style.left = event.clientX - element.clientWidth / 2 + 'px';
+  return element;
+}
+
+//I/O = element / curry function moveElement(event) binded with element
+function curryMoveElementFunc (elem) {
+  return event => moveElement(elem, event);
+}
+

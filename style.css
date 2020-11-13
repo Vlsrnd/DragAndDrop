@@ -1,3 +1,8 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 html, body {
   padding: 0;
   margin: 0;
@@ -8,11 +13,20 @@ body {
 }
 
 .container {
-  width: 100%;
+  max-width: 1140px;
   min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.elements {
+.draw-area {
+  width: 100%;
+  height: 100vh;
+}
+
+.element {
   /* width: 50px; */
   /* height: 50px; */
   padding: 10px;
@@ -31,7 +45,7 @@ body {
   position: absolute;
 }
 
-.elements__btn {
+.element__btn {
   position: absolute;
   right: -8px;
   width: 16px;
@@ -42,23 +56,23 @@ body {
   opacity: .4;
   cursor: pointer;
 }
-.elements__btn:hover {
+.element__btn:hover {
   opacity: 1;
 }
 
-.elements__edit {
+.element__edit {
   background-color: #808000;
   top: -10px;
 }
-.elements__move {
+.element__move {
   cursor: move;
 }
-.elements__remove {
+.element__remove {
   background-color: hsl(0, 100%, 30%);
   bottom: -10px;
 }
 
-.input {
+.element__input {
   border: none;
   text-align: center;
 }
