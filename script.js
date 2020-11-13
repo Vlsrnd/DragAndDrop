@@ -4,6 +4,9 @@ const drawArea = document.querySelector('.draw-area');
 const w = document.documentElement.clientWidth;
 const h = document.documentElement.clientHeight;
 let moveTempElement;
+const elements = [
+  
+]
 
 //////////////////////////////////////////////////
 /////////////////////Listeners////////////////////
