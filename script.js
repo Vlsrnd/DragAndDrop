@@ -13,8 +13,8 @@ structure for element  {
   value: (String) element.textContent,
   parent: (Object) element from which the current element follows,
   children: (Array(Object)) elements that follow from the current element
-  coordX: (Number),
-  coordY: (Number)
+  coordX: (Number) coordinates of center
+  coordY: (Number) coordinates of center 
 }
 */
 elements.set(firstElement, {
@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('mousedown', event => {
   if (event.target.dataset.name === 'element') {
     //bind function moveElement
-    const tempElem = moveElement( appendElement( createElement(event.target), drawArea ), event );
+    const tempElem = moveElement( appendElement( createElement(event.target, event), drawArea ), event );
+    addParentToElemFromElementsCollection(addElemToElementsCollection(tempElem), event.target);
     moveTempElement = curryMoveElementFunc(moveElement, tempElem);
 //moving
     document.addEventListener('mousemove', moveTempElement);
@@ -99,7 +100,7 @@ document.addEventListener('click', event => {
 //////////////////////////////////////////////////
 
 //I/O = obj with current id / div with ++id and structure
-function createElement(obj) {
+function createElement(obj, event) {
   const newElement = document.createElement('div');
   newElement.classList.add('element');
   newElement.textContent = 'New';
@@ -139,9 +140,28 @@ function curryMoveElementFunc (func, elem) {
   return event => func(elem, event);
 }
 
+//I/O = object, object
+function addElemToElementsCollection(elem) {
+  elements.set(elem, {
+    id: elem.dataset.id,
+    value: elem.textContent,
+    parent: null,
+    children: [],
+    coordX: parseInt(elem.left) + elem.clientWidth / 2,
+    coordY: parseInt(elem.top) + elem.clientHeight / 2,
+  })
+  return elem
+}
+
+//I/O = object / object
+function addParentToElemFromElementsCollection(elem, parent) {
+  elements.get(elem).parent = parent;
+  return elem
+}
+
 //I/O = element, object {,[id: Number, value: String, parent: Object, children: Object, 
 // coordX: Number, coordY: Number]} / output: Object
-function savePropertiesOfElement(elem, properties = {}) {
+function changePropertiesOfElement(elem, properties = {}) {
   for (let prop in properties) {
     if (prop === 'children') {
       elements.get(elem)[prop].push(properties[prop]);  
@@ -151,3 +171,4 @@ function savePropertiesOfElement(elem, properties = {}) {
   }
   return elements.get(elem);
 }
+
