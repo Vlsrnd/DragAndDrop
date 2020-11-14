@@ -88,10 +88,7 @@ document.addEventListener('click', event => {
 //removing the element
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'remove') {
-    //if there is one element on board, break
-    //need to change this condition when I'll add setting with count of elements
-    if (document.querySelectorAll('.element').length <= 1) return;
-    event.target.parentNode.remove();
+    removeElement(event.target.parentNode);
   }
 })
 
@@ -127,6 +124,25 @@ function moveElement(element, event) {
   return element;
 }
 
+//I/O = object / if on board last element return this, else return trus
+function removeElement(element) {
+  if (elements.size <= 1) return element;
+  //remove element from collections and property children
+  if (elements.has(element)) {
+    //remove child from parent element in elements collection
+    const parent = elements.get(element).parent;
+    elements.get(parent).children = elements.get(parent).children.filter(child => child != element);
+    //change value parent of all children to 'deleted'
+    elements.get(element).children.forEach(child => {
+      elements.get(child).parent = 'deleted';
+    })
+    //remove element
+    elements.delete(element);
+  }
+  element.remove();
+  return true;
+}
+
 //I/O = object, event / object (main element)
 function moveElementByBtn (element, event) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
@@ -145,7 +161,7 @@ function curryMoveElementFunc (func, elem) {
 function addElemToElementsCollection(elem) {
   elements.set(elem, {
     id: elem.dataset.id,
-    value: elem.textContent,
+    value: 'new',
     parent: null,
     children: [],
     coordX: parseInt(elem.offsetLeft) + elem.clientWidth / 2,
