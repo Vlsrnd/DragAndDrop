@@ -131,6 +131,7 @@ function moveElement(element, event) {
   return element;
 }
 
+
 //I/O = object / if on board last element return this, else return trus
 function removeElement(element) {
   if (elements.size <= 1) return element;
@@ -156,8 +157,17 @@ function moveElementByBtn (element, event) {
   element.style.left = event.clientX - element.clientWidth + 'px';
   if (parseInt(element.style.top) < 0) element.style.top = 0 + 'px';
   if (parseInt(element.style.left) < 0) element.style.left = 0 + 'px';
+  changeCoordInElementsCollection(element);
   return element;
 }
+
+//I/O = object, event / object (main element)
+function changeCoordInElementsCollection(element) {
+  elements.get(element).coordX = element.offsetLeft + element.clientWidth / 2;
+  elements.get(element).coordY = element.offsetTop + element.clientHeight / 2;
+  return element;
+}
+
 
 //I/O = element / curry function moveElement(event) binded with element
 function curryMoveElementFunc (func, elem) {
@@ -189,3 +199,6 @@ function addChildrenToParentElem(parent, child) {
   return child;
 }
 
+// function drawLineOnCanvasBg(x0, y0, x1, y1]) {
+
+// }
