@@ -1,6 +1,8 @@
 'use strict';
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
+const canvasBg = document.getElementById('canvas-bg');
+const ctxBG = canvasBg.getContext('2d');
 const w = document.documentElement.clientWidth;
 const h = document.documentElement.clientHeight;
 let moveTempElement;
@@ -31,10 +33,13 @@ elements.set(firstElement, {
 /////////////////////Listeners////////////////////
 //////////////////////////////////////////////////
 
-//firstElement move to the center of screen
 document.addEventListener('DOMContentLoaded', () => {
+  //firstElement move to the center of screen
   moveElement(firstElement, {clientX: drawArea.getBoundingClientRect().left + drawArea.clientWidth / 2,
                              clientY: drawArea.getBoundingClientRect().top + drawArea.clientHeight / 2});
+  //sizing bacground canvas = drawArea                             
+  canvasBg.style.width = drawArea.clientWidth + 'px';
+  canvasBg.style.height = drawArea.clientHeight + 'px';
 }, {once: true})
 
 //moving by holding the element
@@ -180,18 +185,5 @@ function addParentToElemFromElementsCollection(elem, parent) {
 function addChildrenToParentElem(parent, child) {
   elements.get(parent).children.push(child);
   return child;
-}
-
-//I/O = object (element), object {,[id: Number, value: String, parent: Object, children: Object, 
-// coordX: Number, coordY: Number]} / output: Object (main element)
-function changePropertiesOfElement(elem, properties = {}) {
-  for (let prop in properties) {
-    if (prop === 'children') {
-      elements.get(elem)[prop].push(properties[prop]);  
-    } else {
-      elements.get(elem)[prop] = properties[prop];
-    }
-  }
-  return elements.get(elem);
 }
 
