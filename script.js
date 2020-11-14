@@ -72,6 +72,7 @@ document.addEventListener('mouseup', (event) => {
 
 
 //editing the text into element
+//change prop value for element in elements collrection
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'edit') {
     event.target.previousSibling.textContent = '';
@@ -81,6 +82,7 @@ document.addEventListener('click', event => {
     function forListenerKeydown(event) {
       if (event.keyCode === 13) {
         event.target.parentNode.firstChild.textContent = event.target.value;
+        elements.get(event.target.parentNode).value = event.target.value;
         event.target.classList.add('hide');
         event.target.removeEventListener('keydown', forListenerKeydown);
       }
