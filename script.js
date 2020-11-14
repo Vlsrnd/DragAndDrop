@@ -44,6 +44,7 @@ document.addEventListener('mousedown', event => {
     //bind function moveElement
     const tempElem = moveElement( appendElement( createElement(event.target, event), drawArea ), event );
     addParentToElemFromElementsCollection(addElemToElementsCollection(tempElem), event.target);
+    addChildrenToParentElem(event.target, tempElem);
     moveTempElement = curryMoveElementFunc(moveElement, tempElem);
 //moving
     document.addEventListener('mousemove', moveTempElement);
@@ -99,7 +100,7 @@ document.addEventListener('click', event => {
 /////////////////////Functions////////////////////
 //////////////////////////////////////////////////
 
-//I/O = obj with current id / div with ++id and structure
+//I/O = obj with current id, event / div with ++id and structure
 function createElement(obj, event) {
   const newElement = document.createElement('div');
   newElement.classList.add('element');
@@ -113,20 +114,20 @@ function createElement(obj, event) {
   return newElement;
 }
 
-//I/O = element / element
+//I/O = object, object / object (main element)
 function appendElement(element, place) {
   place.append(element);
   return element
 }
 
-//I/O = element / element
+//I/O = object, event / object (main element)
 function moveElement(element, event) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
   element.style.left = event.clientX - element.clientWidth / 2 + 'px';
   return element;
 }
 
-//I/O = element / element
+//I/O = object, event / object (main element)
 function moveElementByBtn (element, event) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
   element.style.left = event.clientX - element.clientWidth + 'px';
@@ -140,7 +141,7 @@ function curryMoveElementFunc (func, elem) {
   return event => func(elem, event);
 }
 
-//I/O = object, object
+//I/O = object, object (main element)
 function addElemToElementsCollection(elem) {
   elements.set(elem, {
     id: elem.dataset.id,
@@ -153,14 +154,20 @@ function addElemToElementsCollection(elem) {
   return elem
 }
 
-//I/O = object / object
+//I/O = object / object (main element)
 function addParentToElemFromElementsCollection(elem, parent) {
   elements.get(elem).parent = parent;
   return elem
 }
 
-//I/O = element, object {,[id: Number, value: String, parent: Object, children: Object, 
-// coordX: Number, coordY: Number]} / output: Object
+//I/O = object, object / object (child)
+function addChildrenToParentElem(parent, child) {
+  elements.get(parent).children.push(child);
+  return child;
+}
+
+//I/O = object (element), object {,[id: Number, value: String, parent: Object, children: Object, 
+// coordX: Number, coordY: Number]} / output: Object (main element)
 function changePropertiesOfElement(elem, properties = {}) {
   for (let prop in properties) {
     if (prop === 'children') {
