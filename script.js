@@ -8,6 +8,7 @@ const h = document.documentElement.clientHeight;
 let moveTempElement;
 
 const elements = new Map();
+let linesCoordinates = pullPairCoordinates();
 /*
 Example
 structure for element  {
@@ -35,8 +36,9 @@ elements.set(firstElement, {
 
 document.addEventListener('DOMContentLoaded', () => {
   //firstElement move to the center of screen
-  moveElement(firstElement, {clientX: drawArea.getBoundingClientRect().left + drawArea.clientWidth / 2,
-                             clientY: drawArea.getBoundingClientRect().top + drawArea.clientHeight / 2});
+  const centerCoord = getCenterCoordDrawArea()
+  changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
+
   //sizing bacground canvas = drawArea                             
   canvasBg.style.width = drawArea.clientWidth + 'px';
   canvasBg.style.height = drawArea.clientHeight + 'px';
@@ -104,6 +106,12 @@ document.addEventListener('click', event => {
 /////////////////////Functions////////////////////
 //////////////////////////////////////////////////
 
+//I/O = - / object {clientX: Number, clientY: Number};
+function getCenterCoordDrawArea() {
+  return {clientX: +drawArea.offsetLeft + drawArea.clientWidth / 2,
+          clientY: +drawArea.offsetTop + drawArea.clientHeight / 2}
+}
+
 //I/O = obj with current id, event / div with ++id and structure
 function createElement(obj, event) {
   const newElement = document.createElement('div');
@@ -161,7 +169,7 @@ function moveElementByBtn (element, event) {
   return element;
 }
 
-//I/O = object, event / object (main element)
+//I/O = object / object (main element)
 function changeCoordInElementsCollection(element) {
   elements.get(element).coordX = element.offsetLeft + element.clientWidth / 2;
   elements.get(element).coordY = element.offsetTop + element.clientHeight / 2;
@@ -199,6 +207,31 @@ function addChildrenToParentElem(parent, child) {
   return child;
 }
 
+//function create array [[[x0,y0], [x1,y1]], [[x0,y0], [x1,y1]] ... [[x0,y0], [x1,y1]]]
+//for couple parent-child
+//перебираем children и добавляем пары координат текущие координаты и координаты чилдренов
+function pullPairCoordinates() {
+  const arr = Array.from(elements.values())
+  const pairParentChildren = arr.map(elem => [[elem.coordX, elem.coordY], elem.children]);
+  const temp = pairParentChildren.map(elem => [elem[0], elem[1].map(elem => [elements.get(elem).coordX, elements.get(elem).coordY])]);
+  const someResult = temp.map(elem => {
+    const parentCoord = elem[0];
+    return elem[1].map(elem => [parentCoord, elem])
+  })
+  // const pair = pairParentCoordChildrenCoord.map()
+  //  [[parent], [[child], [child], [child]] ]
+
+  const result = someResult.flat();
+  return result;
+}
+
+//temporary
+//
 // function drawLineOnCanvasBg(x0, y0, x1, y1]) {
 
 // }
+
+
+//add coordinates for firstElemn in elements collection
+//add func getCenterCoordDrawArea
+//add pullPairCoordinates
