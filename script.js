@@ -1,8 +1,8 @@
 'use strict';
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
-const canvasBg = document.getElementById('canvas-bg');
-const ctxBG = canvasBg.getContext('2d');
+const canvasBG = document.getElementById('canvas-bg');
+const ctxBG = canvasBG.getContext('2d');
 const w = document.documentElement.clientWidth;
 const h = document.documentElement.clientHeight;
 let moveTempElement;
@@ -40,17 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
 
   //sizing bacground canvas = drawArea                             
-  canvasBg.style.width = drawArea.clientWidth + 'px';
-  canvasBg.style.height = drawArea.clientHeight + 'px';
+  canvasBG.style.width = drawArea.clientWidth + 'px';
+  canvasBG.style.height = drawArea.clientHeight + 'px';
 }, {once: true})
 
-//moving by holding the element
+//create element and moving this by holding the element
 //start moving
 document.addEventListener('mousedown', event => {
   if (event.target.dataset.name === 'element') {
+    // debugger;
     //bind function moveElement
-    const tempElem = moveElement( appendElement( createElement(event.target, event), drawArea ), event );
-    addParentToElemFromElementsCollection(addElemToElementsCollection(tempElem), event.target);
+    const tempElem = moveElement(
+                      addElemToElementsCollection( 
+                        appendElement( createElement(event.target), drawArea)
+                      ), event );
+    // console.log(tempElem);
+    addParentToElemFromElementsCollection(tempElem, event.target);
     addChildrenToParentElem(event.target, tempElem);
     moveTempElement = curryMoveElementFunc(moveElement, tempElem);
 //moving
@@ -70,6 +75,7 @@ document.addEventListener('mousedown', event => {
 //end moving
 document.addEventListener('mouseup', (event) => {
   document.removeEventListener('mousemove', moveTempElement);
+  linesCoordinates = pullPairCoordinates()
 })
 
 
@@ -101,7 +107,6 @@ document.addEventListener('click', event => {
   }
 })
 
-
 //////////////////////////////////////////////////
 /////////////////////Functions////////////////////
 //////////////////////////////////////////////////
@@ -113,16 +118,17 @@ function getCenterCoordDrawArea() {
 }
 
 //I/O = obj with current id, event / div with ++id and structure
-function createElement(obj, event) {
+function createElement(obj) {
   const newElement = document.createElement('div');
   newElement.classList.add('element');
   newElement.textContent = 'New';
   newElement.dataset.id = ++obj.dataset.id;
   newElement.dataset.name = 'element';
-  newElement.insertAdjacentHTML('beforeend', '<div class="element__btn element__edit" data-func="edit">&#9998;</div>'
-                                + '<input class="input hide" type="text"></input>'
-                                + '<div class="element__btn element__remove" data-func="remove">&#10008;</div>'
-                                + '<div class="element__btn element__move" data-func="move">&#9995;</div>');
+  newElement.insertAdjacentHTML('beforeend', 
+        '<div class="element__btn element__edit" data-func="edit">&#9998;</div>'
+      + '<input class="input hide" type="text"></input>'
+      + '<div class="element__btn element__remove" data-func="remove">&#10008;</div>'
+      + '<div class="element__btn element__move" data-func="move">&#9995;</div>');
   return newElement;
 }
 
@@ -136,6 +142,7 @@ function appendElement(element, place) {
 function moveElement(element, event) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
   element.style.left = event.clientX - element.clientWidth / 2 + 'px';
+  changeCoordInElementsCollection(element);
   return element;
 }
 
@@ -147,7 +154,8 @@ function removeElement(element) {
   if (elements.has(element)) {
     //remove child from parent element in elements collection
     const parent = elements.get(element).parent;
-    elements.get(parent).children = elements.get(parent).children.filter(child => child != element);
+    elements.get(parent).children = elements.get(parent)
+                                            .children.filter(child => child != element);
     //change value parent of all children to 'deleted'
     elements.get(element).children.forEach(child => {
       elements.get(child).parent = 'deleted';
@@ -171,6 +179,7 @@ function moveElementByBtn (element, event) {
 
 //I/O = object / object (main element)
 function changeCoordInElementsCollection(element) {
+  debugger;
   elements.get(element).coordX = element.offsetLeft + element.clientWidth / 2;
   elements.get(element).coordY = element.offsetTop + element.clientHeight / 2;
   return element;
@@ -189,8 +198,8 @@ function addElemToElementsCollection(elem) {
     value: 'new',
     parent: null,
     children: [],
-    coordX: parseInt(elem.offsetLeft) + elem.clientWidth / 2,
-    coordY: parseInt(elem.offsetTop) + elem.clientHeight / 2,
+    coordX: elem.offsetLeft + elem.clientWidth / 2,
+    coordY: elem.offsetTop + elem.clientHeight / 2,
   })
   return elem
 }
@@ -209,12 +218,13 @@ function addChildrenToParentElem(parent, child) {
 
 //function create array [[[x0,y0], [x1,y1]], [[x0,y0], [x1,y1]] ... [[x0,y0], [x1,y1]]]
 //for couple parent-child
-//перебираем children и добавляем пары координат текущие координаты и координаты чилдренов
 function pullPairCoordinates() {
   const arrElements = Array.from(elements.values())
-  const pairParentCoordChildrenCoord = arrElements.map(elem => [[elem.coordX, elem.coordY], 
-                                                      elem.children.map(child => [elements.get(child).coordX, elements.get(child).coordY])]);
-  //transform[[parentCoord], [[childCoord], [childCoord], ... [childCoord]]] => [[[parentCoord], [childCoord]], [[parentCoord], [childCoord]] ...]
+  const pairParentCoordChildrenCoord = arrElements.map(elem => 
+    [[elem.coordX, elem.coordY], 
+    elem.children.map(child => [elements.get(child).coordX, elements.get(child).coordY])]);
+  //transform[[parentCoord], [[childCoord], [childCoord], ... [childCoord]]] => 
+  // => [[[parentCoord], [childCoord]], [[parentCoord], [childCoord]] ...]
   const pairParentCoordChildCoord  = pairParentCoordChildrenCoord.map(elem => {
     const parentCoord = elem[0];
     return elem[1].map(elem => [parentCoord, elem])
@@ -224,10 +234,25 @@ function pullPairCoordinates() {
   return result;
 }
 
-//temporary
-//
-// function drawLineOnCanvasBg(x0, y0, x1, y1]) {
 
+
+//temporary
+// function drawLineOnCanvasBg(x0, y0, x1, y1) {
+//   linesCoordinates.forEach(element => {
+//     debugger;
+//     ctxBG.beginPath();
+//     //coordinates parent element
+//     ctxBG.moveTo(element[0][0] - canvasBG.offsetLeft, element[0][1] - canvasBG.offsetTop);
+//     //coordinates child element
+//     ctxBG.lineTo(element[1][0] - canvasBG.offsetLeft, element[1][1] - canvasBG.offsetTop);
+//     ctxBG.closePath();
+//     ctxBG.stroke();
+//   })
 // }
 
 
+// ctxBG.beginPath();
+// ctxBG.moveTo(0,0);
+// ctxBG.lineTo(100,50);
+// ctxBG.closePath();
+// ctxBG.stroke();
