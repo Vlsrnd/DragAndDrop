@@ -108,16 +108,10 @@ document.addEventListener('click', event => {
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'remove') {
     removeElement(event.target.parentNode);
+    updateCoordinatesList();
     drawLineOnCanvasBG();
   }
 })
-
-// //////////////////////////////////////////////////
-// ///////////////////////Canvas/////////////////////
-// //////////////////////////////////////////////////
-
-// const requestCanvasLine = requestAnimationFrame(drawLineOnCanvasBG)
-
 
 //////////////////////////////////////////////////
 /////////////////////Functions////////////////////
@@ -241,17 +235,13 @@ function pullPairCoordinates() {
     const parentCoord = elem[0];
     return elem[1].map(elem => [parentCoord, elem])
   })
-  
-  const result = pairParentCoordChildCoord.flat();
-  return result;
+  return pairParentCoordChildCoord.flat();
 }
 //update coodrdinates list
 function updateCoordinatesList() {
   linesCoordinates = pullPairCoordinates();
   return true;
 }
-
-
 
 //draw coupling lines
 function drawLineOnCanvasBG() {
