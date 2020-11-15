@@ -211,17 +211,16 @@ function addChildrenToParentElem(parent, child) {
 //for couple parent-child
 //перебираем children и добавляем пары координат текущие координаты и координаты чилдренов
 function pullPairCoordinates() {
-  const arr = Array.from(elements.values())
-  const pairParentChildren = arr.map(elem => [[elem.coordX, elem.coordY], elem.children]);
-  const temp = pairParentChildren.map(elem => [elem[0], elem[1].map(elem => [elements.get(elem).coordX, elements.get(elem).coordY])]);
-  const someResult = temp.map(elem => {
+  const arrElements = Array.from(elements.values())
+  const pairParentCoordChildrenCoord = arrElements.map(elem => [[elem.coordX, elem.coordY], 
+                                                      elem.children.map(child => [elements.get(child).coordX, elements.get(child).coordY])]);
+  //transform[[parentCoord], [[childCoord], [childCoord], ... [childCoord]]] => [[[parentCoord], [childCoord]], [[parentCoord], [childCoord]] ...]
+  const pairParentCoordChildCoord  = pairParentCoordChildrenCoord.map(elem => {
     const parentCoord = elem[0];
     return elem[1].map(elem => [parentCoord, elem])
   })
-  // const pair = pairParentCoordChildrenCoord.map()
-  //  [[parent], [[child], [child], [child]] ]
-
-  const result = someResult.flat();
+  
+  const result = pairParentCoordChildCoord.flat();
   return result;
 }
 
@@ -232,6 +231,3 @@ function pullPairCoordinates() {
 // }
 
 
-//add coordinates for firstElemn in elements collection
-//add func getCenterCoordDrawArea
-//add pullPairCoordinates
