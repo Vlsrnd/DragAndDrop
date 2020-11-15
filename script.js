@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
 
   //sizing bacground canvas = drawArea                             
-  canvasBG.style.width = drawArea.clientWidth + 'px';
-  canvasBG.style.height = drawArea.clientHeight + 'px';
+  canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
+  canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
 }, {once: true})
 
 //create element and moving this by holding the element
@@ -237,22 +237,22 @@ function pullPairCoordinates() {
 
 
 //temporary
-// function drawLineOnCanvasBg(x0, y0, x1, y1) {
-//   linesCoordinates.forEach(element => {
-//     debugger;
-//     ctxBG.beginPath();
-//     //coordinates parent element
-//     ctxBG.moveTo(element[0][0] - canvasBG.offsetLeft, element[0][1] - canvasBG.offsetTop);
-//     //coordinates child element
-//     ctxBG.lineTo(element[1][0] - canvasBG.offsetLeft, element[1][1] - canvasBG.offsetTop);
-//     ctxBG.closePath();
-//     ctxBG.stroke();
-//   })
-// }
+function drawLineOnCanvasBG() {
+  linesCoordinates.forEach(element => {
+    debugger;
+    ctxBG.beginPath();
+    //coordinates parent element
+    const x0 = element[0][0] - canvasBG.offsetLeft;
+    const y0 = element[0][1] - canvasBG.offsetTop;
+    const x1 = element[1][0] - canvasBG.offsetLeft;
+    const y1 = element[1][1] - canvasBG.offsetTop;
+    console.log(x0 + ' ' + y0);
+    console.log(x1 + ' ' + y1);
+    ctxBG.moveTo(x0, y0);
+    //coordinates child element
+    ctxBG.lineTo(x1, y1);
+    ctxBG.closePath();
+    ctxBG.stroke();
+  })
+}
 
-
-// ctxBG.beginPath();
-// ctxBG.moveTo(0,0);
-// ctxBG.lineTo(100,50);
-// ctxBG.closePath();
-// ctxBG.stroke();
