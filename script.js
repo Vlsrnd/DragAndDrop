@@ -60,6 +60,8 @@ document.addEventListener('mousedown', event => {
     moveTempElement = curryMoveElementFunc(moveElement, tempElem);
 //moving
     document.addEventListener('mousemove', moveTempElement);
+    document.addEventListener('mousemove', updateCoordinatesList);
+    document.addEventListener('mousemove', drawLineOnCanvasBG);
   }
 })
 //moving by holding the handle-move button
@@ -70,14 +72,16 @@ document.addEventListener('mousedown', event => {
     moveTempElement = curryMoveElementFunc(moveElementByBtn, tempElem);
     //moving
     document.addEventListener('mousemove', moveTempElement);
+    document.addEventListener('mousemove', updateCoordinatesList);
+    document.addEventListener('mousemove', drawLineOnCanvasBG);
   }
 })
 //end moving
 document.addEventListener('mouseup', (event) => {
   document.removeEventListener('mousemove', moveTempElement);
-  linesCoordinates = pullPairCoordinates()
+  document.removeEventListener('mousemove', updateCoordinatesList);
+  document.removeEventListener('mousemove', drawLineOnCanvasBG);
 })
-
 
 //editing the text into element
 //change prop value for element in elements collrection
@@ -104,8 +108,16 @@ document.addEventListener('click', event => {
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'remove') {
     removeElement(event.target.parentNode);
+    drawLineOnCanvasBG();
   }
 })
+
+// //////////////////////////////////////////////////
+// ///////////////////////Canvas/////////////////////
+// //////////////////////////////////////////////////
+
+// const requestCanvasLine = requestAnimationFrame(drawLineOnCanvasBG)
+
 
 //////////////////////////////////////////////////
 /////////////////////Functions////////////////////
@@ -179,7 +191,6 @@ function moveElementByBtn (element, event) {
 
 //I/O = object / object (main element)
 function changeCoordInElementsCollection(element) {
-  debugger;
   elements.get(element).coordX = element.offsetLeft + element.clientWidth / 2;
   elements.get(element).coordY = element.offsetTop + element.clientHeight / 2;
   return element;
@@ -188,6 +199,7 @@ function changeCoordInElementsCollection(element) {
 
 //I/O = element / curry function moveElement(event) binded with element
 function curryMoveElementFunc (func, elem) {
+  drawLineOnCanvasBG();
   return event => func(elem, event);
 }
 
@@ -233,24 +245,23 @@ function pullPairCoordinates() {
   const result = pairParentCoordChildCoord.flat();
   return result;
 }
+//update coodrdinates list
+function updateCoordinatesList() {
+  linesCoordinates = pullPairCoordinates();
+  return true;
+}
 
 
 
-//temporary
+//draw coupling lines
 function drawLineOnCanvasBG() {
+  ctxBG.clearRect(0, 0, canvasBG.width, canvasBG.height);
   linesCoordinates.forEach(element => {
-    debugger;
     ctxBG.beginPath();
     //coordinates parent element
-    const x0 = element[0][0] - canvasBG.offsetLeft;
-    const y0 = element[0][1] - canvasBG.offsetTop;
-    const x1 = element[1][0] - canvasBG.offsetLeft;
-    const y1 = element[1][1] - canvasBG.offsetTop;
-    console.log(x0 + ' ' + y0);
-    console.log(x1 + ' ' + y1);
-    ctxBG.moveTo(x0, y0);
+    ctxBG.moveTo(element[0][0] - canvasBG.offsetLeft, element[0][1] - canvasBG.offsetTop);
     //coordinates child element
-    ctxBG.lineTo(x1, y1);
+    ctxBG.lineTo(element[1][0] - canvasBG.offsetLeft, element[1][1] - canvasBG.offsetTop);
     ctxBG.closePath();
     ctxBG.stroke();
   })
