@@ -50,6 +50,7 @@ body {
   font-family: monospace;
   text-transform: uppercase;
   user-select: none;
+  cursor: copy;
 
   position: absolute;
 }
@@ -72,6 +73,7 @@ body {
 .element__edit {
   background-color: #808000;
   top: -10px;
+  cursor: text;
 }
 .element__move {
   cursor: move;

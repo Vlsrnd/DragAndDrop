@@ -160,8 +160,10 @@ function removeElement(element) {
   if (elements.has(element)) {
     //remove child from parent element in elements collection
     const parent = elements.get(element).parent;
-    elements.get(parent).children = elements.get(parent)
-                                            .children.filter(child => child != element);
+    if (elements.has(parent)) {
+      elements.get(parent).children = elements.get(parent)
+                                              .children.filter(child => child != element);
+    }
     //change value parent of all children to 'deleted'
     elements.get(element).children.forEach(child => {
       elements.get(child).parent = 'deleted';
