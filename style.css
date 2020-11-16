@@ -29,14 +29,16 @@ body {
 }
 
 .canvas {
-  position: absolute;
+  background-color: #777;
+  padding: 0;
+  margin: 0;
 }
 /* #canvas-bg */
 
 
 .element {
-  /* width: 50px; */
-  /* height: 50px; */
+  position: absolute;
+
   padding: 10px;
   border: 1px solid #000;
   border-radius: 9999px;
@@ -52,7 +54,6 @@ body {
   user-select: none;
   cursor: copy;
 
-  position: absolute;
 }
 
 .element__btn {

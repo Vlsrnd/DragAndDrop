@@ -3,8 +3,8 @@ const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
 const canvasBG = document.getElementById('canvas-bg');
 const ctxBG = canvasBG.getContext('2d');
-const w = document.documentElement.clientWidth;
-const h = document.documentElement.clientHeight;
+let w = document.documentElement.clientWidth;
+let h = document.documentElement.clientHeight;
 let moveTempElement;
 
 const elements = new Map();
@@ -21,7 +21,7 @@ structure for element  {
 }
 */
 elements.set(firstElement, {
-                            id: 0,
+                            id: '0',
                             value: 'first',
                             parent: null,
                             children: [],
@@ -40,8 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
 
   //sizing bacground canvas = drawArea                             
-  canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
-  canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
+  resizeCanvas();
 }, {once: true})
 
 //create element and moving this by holding the element
@@ -112,6 +111,16 @@ document.addEventListener('click', event => {
     drawLineOnCanvasBG();
   }
 })
+
+//no comments
+//there is double resizeCanvas(), because there is bag with wrong width of canvas
+window.addEventListener('resize', () => {
+  console.clear();
+  resizeCanvas();
+  resizeWindow();
+  updateCoordinatesList();
+  drawLineOnCanvasBG();
+});
 
 //////////////////////////////////////////////////
 /////////////////////Functions////////////////////
@@ -257,5 +266,29 @@ function drawLineOnCanvasBG() {
     ctxBG.closePath();
     ctxBG.stroke();
   })
+  return true;
+}
+
+//reposition elements
+function resizeWindow() {
+  resizeCanvas();
+  const deltaH = document.documentElement.clientHeight / h;
+  const deltaW = document.documentElement.clientWidth / w;
+  Array.from(elements.keys()).forEach(elem => {
+    elem.style.top = elem.offsetTop * deltaH + 'px';
+    elem.style.left = elem.offsetLeft * deltaW + 'px';
+    changeCoordInElementsCollection(elem);
+  })  
+  w = document.documentElement.clientWidth;
+  h = document.documentElement.clientHeight;
+  return true;
+}
+
+//resize canvas
+function resizeCanvas() {
+  canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
+  canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
+  console.log(canvasBG.width + ' = ' + drawArea.clientWidth);
+  return true;
 }
 
