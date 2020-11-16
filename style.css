@@ -21,17 +21,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  overflow: hidden;
 }
 
 .draw-area {
-  min-width: 800px;
-  min-height: 600px;
-  /* width: 50%; */
-  /* height: 100vh; */
+  min-width: 640px;
+  min-height: 480px;
   border: 1px solid black;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
+/* fix bag with white strip when decrease window height*/
+  font-size: 0;
 }
 
 .canvas {
@@ -39,12 +39,12 @@ body {
   padding: 0;
   margin: 0;
 }
-/* #canvas-bg */
 
 
 .element {
   position: absolute;
 
+  font-size: 14px;
   padding: 10px;
   border: 1px solid #000;
   border-radius: 9999px;

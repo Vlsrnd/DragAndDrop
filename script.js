@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const centerCoord = getCenterCoordDrawArea()
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
 
-  //sizing bacground canvas = drawArea                             
+  //sizing bacground canvas = drawArea 
   resizeCanvas();
 }, {once: true})
 
@@ -113,9 +113,7 @@ document.addEventListener('click', event => {
 })
 
 //no comments
-//there is double resizeCanvas(), because there is bag with wrong width of canvas
 window.addEventListener('resize', () => {
-  console.clear();
   resizeCanvas();
   resizeWindow();
   updateCoordinatesList();
@@ -288,12 +286,12 @@ function drawLineOnCanvasBG() {
 
 //reposition elements
 function resizeWindow() {
-  resizeCanvas();
   const deltaH = document.documentElement.clientHeight / h;
   const deltaW = document.documentElement.clientWidth / w;
   Array.from(elements.keys()).forEach(elem => {
     elem.style.top = elem.offsetTop * deltaH + 'px';
     elem.style.left = elem.offsetLeft * deltaW + 'px';
+    correctPosition(elem);
     changeCoordInElementsCollection(elem);
   })  
   w = document.documentElement.clientWidth;
@@ -305,7 +303,6 @@ function resizeWindow() {
 function resizeCanvas() {
   canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
   canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
-  console.log(canvasBG.width + ' = ' + drawArea.clientWidth);
   return true;
 }
 
