@@ -69,12 +69,14 @@ body {
   line-height: 16px;
   border-radius: 50%;
   color: #000;
-  opacity: .2;
+  opacity: 0;
   cursor: pointer;
 }
-.element__btn:hover {
+
+.element:hover .element__btn {
   opacity: 1;
 }
+
 
 .element__edit {
   background-color: #808000;
