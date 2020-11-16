@@ -10,6 +10,7 @@ html, body {
 
 body {
   position: relative;
+
 }
 
 .container {
@@ -20,12 +21,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  overflow: hidden;
 }
 
 .draw-area {
-  width: 50%;
-  height: 100vh;
+  min-width: 800px;
+  min-height: 600px;
+  /* width: 50%; */
+  /* height: 100vh; */
   border: 1px solid black;
+  overflow: hidden;
 }
 
 .canvas {

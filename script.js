@@ -157,6 +157,7 @@ function appendElement(element, place) {
 function moveElement(element, event) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
   element.style.left = event.clientX - element.clientWidth / 2 + 'px';
+  correctPosition(element);
   changeCoordInElementsCollection(element);
   return element;
 }
@@ -188,10 +189,26 @@ function removeElement(element) {
 function moveElementByBtn (element, event) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
   element.style.left = event.clientX - element.clientWidth + 'px';
-  if (parseInt(element.style.top) < 0) element.style.top = 0 + 'px';
-  if (parseInt(element.style.left) < 0) element.style.left = 0 + 'px';
+  correctPosition(element);
   changeCoordInElementsCollection(element);
   return element;
+}
+
+//I/O = element / true;
+function correctPosition(element) {
+  if (element.offsetTop < drawArea.offsetTop) element.style.top = drawArea.offsetTop + 'px';
+  if (element.offsetTop + element.clientHeight >
+      drawArea.offsetTop + drawArea.clientHeight) element.style.top = drawArea.offsetTop
+                                                                    + drawArea.clientHeight
+                                                                    - element.clientHeight
+                                                                    + 'px';
+  if (element.offsetLeft < drawArea.offsetLeft) element.style.left = drawArea.offsetLeft + 'px';
+  if (element.offsetLeft + element.clientWidth >
+      drawArea.offsetLeft + drawArea.clientWidth) element.style.left =  drawArea.offsetLeft
+                                                                      + drawArea.clientWidth
+                                                                      - element.clientWidth
+                                                                      + 'px';
+  return true;
 }
 
 //I/O = object / object (main element)
