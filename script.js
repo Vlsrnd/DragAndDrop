@@ -305,4 +305,3 @@ function resizeCanvas() {
   canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
   return true;
 }
-
