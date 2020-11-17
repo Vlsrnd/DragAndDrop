@@ -1,21 +1,23 @@
 'use strict';
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
-const trash = document.querySelector('.trash');
-const trashHead = document.querySelector('.trash__head');
 const canvasBG = document.getElementById('canvas-bg');
 const ctxBG = canvasBG.getContext('2d');
+const outputList = document.querySelector('.text-output ol');
+const trash = document.querySelector('.trash');
+const trashHead = document.querySelector('.trash__head');
 let w = document.documentElement.clientWidth;
 let h = document.documentElement.clientHeight;
 let moveTempElement;
 
 const elements = new Map();
 let linesCoordinates = pullPairCoordinates();
+let textList = [];
 const trashCollection = new Map();
 /*
 Example
 structure for element  {
-  id: (Number) element.dataset.id,
+  level: (Number) element.dataset.level,
   value: (String) element.textContent,
   parent: (Object) element from which the current element follows,
   children: (Array(Object)) elements that follow from the current element
@@ -24,7 +26,7 @@ structure for element  {
 }
 */
 elements.set(firstElement, {
-                            id: '0',
+                            level: '0',
                             value: 'first',
                             parent: null,
                             children: [],
@@ -56,6 +58,7 @@ document.addEventListener('mousedown', event => {
                       addElemToElementsCollection( 
                         appendElement( createElement(event.target), drawArea)
                       ), event );
+    updateTextList();
     // console.log(tempElem);
     addParentToElemFromElementsCollection(tempElem, event.target);
     addChildrenToParentElem(event.target, tempElem);
@@ -97,6 +100,7 @@ document.addEventListener('click', event => {
       if (event.keyCode === 13) {
         event.target.parentNode.firstChild.textContent = event.target.value;
         elements.get(event.target.parentNode).value = event.target.value;
+        updateTextList();
         event.target.classList.add('hide');
         event.target.removeEventListener('keydown', forListenerKeydown);
       }
@@ -133,12 +137,12 @@ function getCenterCoordDrawArea() {
           clientY: +drawArea.offsetTop + drawArea.clientHeight / 2}
 }
 
-//I/O = obj with current id, event / div with ++id and structure
+//I/O = obj with current level, event / div with level+1 and structure
 function createElement(obj) {
   const newElement = document.createElement('div');
   newElement.classList.add('element');
   newElement.textContent = 'New';
-  newElement.dataset.id = ++obj.dataset.id;
+  newElement.dataset.level = +obj.dataset.level + 1;
   newElement.dataset.name = 'element';
   newElement.insertAdjacentHTML('beforeend', 
         '<div class="element__btn element__edit" data-func="edit">&#9998;</div>'
@@ -245,7 +249,7 @@ function curryMoveElementFunc (func, elem) {
 //I/O = object, object (main element)
 function addElemToElementsCollection(elem) {
   elements.set(elem, {
-    id: elem.dataset.id,
+    level: elem.dataset.level,
     value: 'new',
     parent: null,
     children: [],
@@ -323,5 +327,11 @@ function resizeWindow() {
 function resizeCanvas() {
   canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
   canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
+  return true;
+}
+
+//change output text
+function updateTextList() {
+  textList = [...Array.from(elements.entries()).map(elem => [elem[0], +elem[1].level, elem[1].value])];
   return true;
 }
