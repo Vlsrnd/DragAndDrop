@@ -1,5 +1,5 @@
 :root {
-  --delay-delete: 0.4s;
+  --delay-delete: 0.5s;
 }
 
 *,
@@ -31,7 +31,7 @@ body {
     "draw-area draw-area draw-area draw-area trash"
     "footer footer footer footer footer";
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 60px, repeat(4, 1fr), 60px;
+  grid-template-rows: 40px, repeat(4, 1fr), 40px;
   grid-gap: 10px;
 }
 
@@ -43,15 +43,15 @@ body {
   align-items: center;
 }
 .header h1 {
-  position: relative;
+  margin: 0;
 }
 .header h1 span:first-child {
   display: inline-block;
-  animation: drag 2s ease-in-out;
+  animation: drag 1s ease-in-out;
 }
 .header h1 span:last-child {
   display: inline-block;
-  animation: drop 2s ease-in-out 2s;
+  animation: drop 1s ease-in-out 0.8s;
 }
 @keyframes drag {
   0% {
@@ -264,6 +264,7 @@ body {
   grid-area: footer;
   background-color: #303030;
   color: #ffe4c4;
+  line-height: 40px;
 }
 /* footer style end */
 /*  */

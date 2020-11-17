@@ -180,7 +180,7 @@ function removeElement(element) {
   //animation
   element.classList.add('element-smooth-move')
   element.style.left = trash.offsetLeft + trash.clientWidth / 2 + 'px';
-  element.style.top = trash.offsetTop + trash.clientHeight / 2 + 'px';
+  element.style.top = trash.offsetTop  + 'px';
   element.style.transform = 'rotate(360deg)';
   trashHead.classList.add('trash__head-animate');
   //animation code end
@@ -360,6 +360,6 @@ function updateOutputList(list){
     }
   }
 
-  outputList.innerHTML = firstPart + lastPart;
+  outputList.innerHTML = '<h2>Structure</h2>' + firstPart + lastPart;
   return list;
 }
