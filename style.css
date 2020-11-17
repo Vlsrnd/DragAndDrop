@@ -42,8 +42,40 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-.nav {
+.header h1 {
+  position: relative;
 }
+.header h1 span:first-child {
+  display: inline-block;
+  animation: drag 2s ease-in-out;
+}
+.header h1 span:last-child {
+  display: inline-block;
+  animation: drop 2s ease-in-out 2s;
+}
+@keyframes drag {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes drop {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.nav {}
 .help {
   font-family: monospace;
   background-color: none;
