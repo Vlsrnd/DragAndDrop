@@ -3,16 +3,21 @@ const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
 const canvasBG = document.getElementById('canvas-bg');
 const ctxBG = canvasBG.getContext('2d');
+const outputList = document.querySelector('.text-output');
+const trash = document.querySelector('.trash');
+const trashHead = document.querySelector('.trash__head');
 let w = document.documentElement.clientWidth;
 let h = document.documentElement.clientHeight;
 let moveTempElement;
 
 const elements = new Map();
 let linesCoordinates = pullPairCoordinates();
+let textList = [];
+const trashCollection = new Map();
 /*
 Example
 structure for element  {
-  id: (Number) element.dataset.id,
+  level: (Number) element.dataset.level,
   value: (String) element.textContent,
   parent: (Object) element from which the current element follows,
   children: (Array(Object)) elements that follow from the current element
@@ -21,7 +26,7 @@ structure for element  {
 }
 */
 elements.set(firstElement, {
-                            id: '0',
+                            level: '0',
                             value: 'first',
                             parent: null,
                             children: [],
@@ -38,9 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
   //firstElement move to the center of screen
   const centerCoord = getCenterCoordDrawArea()
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
-
+  updateTextList();
+  updateOutputList(textList);
   //sizing bacground canvas = drawArea 
   resizeCanvas();
+
 }, {once: true})
 
 //create element and moving this by holding the element
@@ -53,6 +60,8 @@ document.addEventListener('mousedown', event => {
                       addElemToElementsCollection( 
                         appendElement( createElement(event.target), drawArea)
                       ), event );
+    updateTextList();
+    updateOutputList(textList);
     // console.log(tempElem);
     addParentToElemFromElementsCollection(tempElem, event.target);
     addChildrenToParentElem(event.target, tempElem);
@@ -94,11 +103,13 @@ document.addEventListener('click', event => {
       if (event.keyCode === 13) {
         event.target.parentNode.firstChild.textContent = event.target.value;
         elements.get(event.target.parentNode).value = event.target.value;
+        updateTextList();
+        updateOutputList(textList);
         event.target.classList.add('hide');
         event.target.removeEventListener('keydown', forListenerKeydown);
       }
     }
-
+    
     event.target.nextElementSibling.addEventListener('keydown', forListenerKeydown)
   }
 })
@@ -107,8 +118,8 @@ document.addEventListener('click', event => {
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'remove') {
     removeElement(event.target.parentNode);
-    updateCoordinatesList();
-    drawLineOnCanvasBG();
+    // updateCoordinatesList();
+    // drawLineOnCanvasBG();
   }
 })
 
@@ -130,12 +141,12 @@ function getCenterCoordDrawArea() {
           clientY: +drawArea.offsetTop + drawArea.clientHeight / 2}
 }
 
-//I/O = obj with current id, event / div with ++id and structure
+//I/O = obj with current level, event / div with level+1 and structure
 function createElement(obj) {
   const newElement = document.createElement('div');
   newElement.classList.add('element');
   newElement.textContent = 'New';
-  newElement.dataset.id = ++obj.dataset.id;
+  newElement.dataset.level = +obj.dataset.level + 1;
   newElement.dataset.name = 'element';
   newElement.insertAdjacentHTML('beforeend', 
         '<div class="element__btn element__edit" data-func="edit">&#9998;</div>'
@@ -164,22 +175,38 @@ function moveElement(element, event) {
 //I/O = object / if on board last element return this, else return trus
 function removeElement(element) {
   if (elements.size <= 1) return element;
+
+  trashCollection.set(element, elements.get(element)) 
+  //animation
+  element.classList.add('element-smooth-move')
+  element.style.left = trash.offsetLeft + trash.clientWidth / 2 + 'px';
+  element.style.top = trash.offsetTop  + 'px';
+  element.style.transform = 'rotate(360deg)';
+  trashHead.classList.add('trash__head-animate');
+  //animation code end
+
   //remove element from collections and property children
   if (elements.has(element)) {
     //remove child from parent element in elements collection
     const parent = elements.get(element).parent;
     if (elements.has(parent)) {
       elements.get(parent).children = elements.get(parent)
-                                              .children.filter(child => child != element);
+      .children.filter(child => child != element);
     }
     //change value parent of all children to 'deleted'
     elements.get(element).children.forEach(child => {
       elements.get(child).parent = 'deleted';
     })
-    //remove element
-    elements.delete(element);
   }
-  element.remove();
+  elements.delete(element);
+  updateCoordinatesList();
+  drawLineOnCanvasBG();
+  
+  element.addEventListener('transitionend', () => {
+    trashHead.classList.remove('trash__head-animate');
+    element.remove();
+  }, {once: true});
+
   return true;
 }
 
@@ -226,7 +253,7 @@ function curryMoveElementFunc (func, elem) {
 //I/O = object, object (main element)
 function addElemToElementsCollection(elem) {
   elements.set(elem, {
-    id: elem.dataset.id,
+    level: elem.dataset.level,
     value: 'new',
     parent: null,
     children: [],
@@ -272,6 +299,7 @@ function updateCoordinatesList() {
 //draw coupling lines
 function drawLineOnCanvasBG() {
   ctxBG.clearRect(0, 0, canvasBG.width, canvasBG.height);
+  ctxBG.lineWidth = 3;
   linesCoordinates.forEach(element => {
     ctxBG.beginPath();
     //coordinates parent element
@@ -304,4 +332,34 @@ function resizeCanvas() {
   canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
   canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
   return true;
+}
+
+//I/O = - / true
+function updateTextList() {
+  textList = [...Array.from(elements.entries()).map(elem => [elem[0], +elem[1].level, elem[1].value])];
+  return true;
+}
+
+//list as [element, level, value] / output: list
+function updateOutputList(list){
+  textList.sort( (a, b) => a[1] - b[1] );
+  let firstPart = '<ul><li>';
+  let lastPart = '</li></ul>';
+
+  // debugger;
+  for (let i = 0; i < list.length; i++){
+    if (i === 0) {
+      firstPart += list[i][2];
+    } else {
+      if (list[i][1] === list[i - 1][1]){
+        firstPart += `</li><li>${list[i][2]}`;
+      } else {
+        firstPart += `<ul><li>${list[i][2]}`;
+        lastPart += '</li></ul>' + lastPart;
+      }
+    }
+  }
+
+  outputList.innerHTML = '<h2>Structure</h2>' + firstPart + lastPart;
+  return list;
 }

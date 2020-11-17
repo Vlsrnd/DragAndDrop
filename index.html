@@ -8,9 +8,14 @@
 </head>
 <body>
   <div class="container">
+    <header class="header"> 
+      <nav class="nav">menu</nav>
+      <h1><span>drag</span>N<span>drop</span></h1>
+      <button class="help">?</button>
+    </header>
     <div class="draw-area">
       <canvas class="canvas" id="canvas-bg"></canvas>
-      <div class="element" id="firstElement" data-name="element" data-id="0">
+      <div class="element" id="firstElement" data-name="element" data-level="0">
         first
         <div class="element__btn element__edit" data-func="edit">&#9998;</div>
         <input class="element__input hide" type="text"></input>
@@ -18,7 +23,16 @@
         <div class="element__btn element__move" data-func="move">&#9995;</div>
       </div>
     </div>
-    <script src="script.js"></script>
+    <div class="text-output">
+    </div>
+    <div class="trash">
+      <div class="trash__head"></div>
+      <div class="trash__body"></div>
+    </div>
+    <footer class="footer">
+      Created by VLS - 2020
+    </footer>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
