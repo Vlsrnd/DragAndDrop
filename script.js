@@ -3,7 +3,7 @@ const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
 const canvasBG = document.getElementById('canvas-bg');
 const ctxBG = canvasBG.getContext('2d');
-const outputList = document.querySelector('.text-output ol');
+const outputList = document.querySelector('.text-output');
 const trash = document.querySelector('.trash');
 const trashHead = document.querySelector('.trash__head');
 let w = document.documentElement.clientWidth;
@@ -43,9 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
   //firstElement move to the center of screen
   const centerCoord = getCenterCoordDrawArea()
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
-
+  updateTextList();
+  updateOutputList(textList);
   //sizing bacground canvas = drawArea 
   resizeCanvas();
+
 }, {once: true})
 
 //create element and moving this by holding the element
@@ -59,6 +61,7 @@ document.addEventListener('mousedown', event => {
                         appendElement( createElement(event.target), drawArea)
                       ), event );
     updateTextList();
+    updateOutputList(textList);
     // console.log(tempElem);
     addParentToElemFromElementsCollection(tempElem, event.target);
     addChildrenToParentElem(event.target, tempElem);
@@ -101,11 +104,12 @@ document.addEventListener('click', event => {
         event.target.parentNode.firstChild.textContent = event.target.value;
         elements.get(event.target.parentNode).value = event.target.value;
         updateTextList();
+        updateOutputList(textList);
         event.target.classList.add('hide');
         event.target.removeEventListener('keydown', forListenerKeydown);
       }
     }
-
+    
     event.target.nextElementSibling.addEventListener('keydown', forListenerKeydown)
   }
 })
@@ -330,8 +334,32 @@ function resizeCanvas() {
   return true;
 }
 
-//change output text
+//I/O = - / true
 function updateTextList() {
   textList = [...Array.from(elements.entries()).map(elem => [elem[0], +elem[1].level, elem[1].value])];
   return true;
+}
+
+//list as [element, level, value] / output: list
+function updateOutputList(list){
+  textList.sort( (a, b) => a[1] - b[1] );
+  let firstPart = '<ul><li>';
+  let lastPart = '</li></ul>';
+
+  // debugger;
+  for (let i = 0; i < list.length; i++){
+    if (i === 0) {
+      firstPart += list[i][2];
+    } else {
+      if (list[i][1] === list[i - 1][1]){
+        firstPart += `</li><li>${list[i][2]}`;
+      } else {
+        firstPart += `<ul><li>${list[i][2]}`;
+        lastPart += '</li></ul>' + lastPart;
+      }
+    }
+  }
+
+  outputList.innerHTML = firstPart + lastPart;
+  return list;
 }

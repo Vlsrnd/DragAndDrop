@@ -18,7 +18,7 @@ body {
 }
 
 .container {
-  max-width: 1140px;
+  max-width: 1920px;
   height: 100vh;
   margin: 0 auto;
 
@@ -169,8 +169,9 @@ body {
 .trash {
   grid-area: trash;
   justify-self: center;
-  width: 50%;
-  height: 100%;
+  align-self: flex-end;
+  width: 100px;
+  height: 150px;
   position: relative;
   cursor: pointer;
 }
