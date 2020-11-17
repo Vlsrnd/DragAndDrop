@@ -1,3 +1,7 @@
+:root {
+  --delay-delete: 0.4s;
+}
+
 *,
 *::before,
 *::after {
@@ -84,7 +88,7 @@ body {
   cursor: copy;
 }
 .element-smooth-move {
-  transition: all .4s linear;
+  transition: all var(--delay-delete) linear;
 }
 
 .element__btn {
@@ -132,10 +136,9 @@ body {
 
 .trash {
   grid-area: trash;
+  justify-self: center;
   width: 50%;
   height: 100%;
-  /* width: 75px; */
-  /* height: 100px; */
   position: relative;
   cursor: pointer;
 }
@@ -174,9 +177,27 @@ body {
   top: -50%;
   transform: translateX(-50%);
 }
+.trash__head-animate {
+  animation: open_head calc(var(--delay-delete)) linear 1   ;
+}
+@keyframes open_head {
+  0% {
+    transform-origin: bottom right;
+    transform: translateX(-50%);
+  }
+  80%{
+    transform-origin: bottom right;
+    transform: translateX(-50%) rotate(45deg);
+  }
+  100% {
+    transform-origin: bottom right;
+    transform: translateX(-50%);
+  }
+}
 
 .trash:hover .trash__head {
-  transform: rotate(45deg);
+  transform-origin: bottom right;
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .trash__body {

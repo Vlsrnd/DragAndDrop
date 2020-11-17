@@ -2,6 +2,7 @@
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
 const trash = document.querySelector('.trash');
+const trashHead = document.querySelector('.trash__head');
 const canvasBG = document.getElementById('canvas-bg');
 const ctxBG = canvasBG.getContext('2d');
 let w = document.documentElement.clientWidth;
@@ -173,8 +174,9 @@ function removeElement(element) {
   element.style.left = trash.offsetLeft + trash.clientWidth / 2 + 'px';
   element.style.top = trash.offsetTop + trash.clientHeight / 2 + 'px';
   element.style.transform = 'rotate(360deg)';
+  trashHead.classList.add('trash__head-animate');
   //animation code end
-  
+
   //remove element from collections and property children
   if (elements.has(element)) {
     //remove child from parent element in elements collection
@@ -193,6 +195,7 @@ function removeElement(element) {
   drawLineOnCanvasBG();
   
   element.addEventListener('transitionend', () => {
+    trashHead.classList.remove('trash__head-animate');
     element.remove();
   }, {once: true});
 
