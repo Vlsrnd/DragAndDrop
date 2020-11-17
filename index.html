@@ -8,6 +8,11 @@
 </head>
 <body>
   <div class="container">
+    <header class="header" style="opacity: 0;"> 
+      <nav class="nav">menu</nav>
+      <h1>dragNdrop</h1>
+      <button class="help">?</button>
+    </header>
     <div class="draw-area">
       <canvas class="canvas" id="canvas-bg"></canvas>
       <div class="element" id="firstElement" data-name="element" data-id="0">
@@ -18,10 +23,14 @@
         <div class="element__btn element__move" data-func="move">&#9995;</div>
       </div>
     </div>
-    <div class="trash">
+    <div class="text-output"></div>
+    <div class="trash" style="opacity: 0;">
       <div class="trash__head"></div>
       <div class="trash__body"></div>
     </div>
+    <footer class="footer" style="opacity: 0;">
+      Created by VLS - 2020
+    </footer>
   </div>
   <script src="script.js"></script>
 </body>
