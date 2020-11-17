@@ -272,6 +272,7 @@ function updateCoordinatesList() {
 //draw coupling lines
 function drawLineOnCanvasBG() {
   ctxBG.clearRect(0, 0, canvasBG.width, canvasBG.height);
+  ctxBG.lineWidth = 3;
   linesCoordinates.forEach(element => {
     ctxBG.beginPath();
     //coordinates parent element

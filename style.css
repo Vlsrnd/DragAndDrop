@@ -96,6 +96,79 @@ body {
   text-align: center;
 }
 
+/* trash style start */
+
+.trash {
+  width: 150px;
+  height: 200px;
+  position: relative;
+  cursor: pointer;
+}
+
+.trash__head {
+  width: 100%;
+  height: 8%;
+  background-color: #000;
+  border-radius: 9999px 9999px 0 0;
+
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all .1s linear;
+}
+.trash__head::before {
+  content: '';
+  background-color: #000;
+  border-radius: 50% 50% 0 0;
+  width: 30%;
+  height: 110%;
+  position: absolute;
+  left: 50%;
+  top: -100%;
+  transform: translateX(-50%);
+}
+.trash__head::after {
+  content: '';
+  background-color: #fff;
+  border-radius: 50% 50% 0 0;
+  width: 20%;
+  height: 50%;
+  position: absolute;
+  left: 50%;
+  top: -50%;
+  transform: translateX(-50%);
+}
+
+.trash:hover .trash__head {
+  transform: rotate(45deg);
+}
+
+.trash__body {
+  width: 100%;
+  height: 80%;
+  background-color: #000;
+  border-radius: 5% 5% 20% 20% / 10% 10% 90% 90%;
+
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.trash__body::before {
+  position: absolute;
+  content: '';
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 50%;
+  border-radius: 5% 5% 20% 20% / 10% 10% 90% 90%;
+  transform: translateX(-50%);
+  background-color: #fff;
+}
+/* trash style end */
+
 .hide {
   display: none;
 }
