@@ -83,6 +83,9 @@ body {
   user-select: none;
   cursor: copy;
 }
+.element-smooth-move {
+  transition: all .4s linear;
+}
 
 .element__btn {
   position: absolute;

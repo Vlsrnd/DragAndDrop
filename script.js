@@ -1,6 +1,7 @@
 'use strict';
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
+const trash = document.querySelector('.trash');
 const canvasBG = document.getElementById('canvas-bg');
 const ctxBG = canvasBG.getContext('2d');
 let w = document.documentElement.clientWidth;
@@ -9,6 +10,7 @@ let moveTempElement;
 
 const elements = new Map();
 let linesCoordinates = pullPairCoordinates();
+const trashCollection = new Map();
 /*
 Example
 structure for element  {
@@ -107,8 +109,8 @@ document.addEventListener('click', event => {
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'remove') {
     removeElement(event.target.parentNode);
-    updateCoordinatesList();
-    drawLineOnCanvasBG();
+    // updateCoordinatesList();
+    // drawLineOnCanvasBG();
   }
 })
 
@@ -164,22 +166,36 @@ function moveElement(element, event) {
 //I/O = object / if on board last element return this, else return trus
 function removeElement(element) {
   if (elements.size <= 1) return element;
+
+  trashCollection.set(element, elements.get(element)) 
+  //animation
+  element.classList.add('element-smooth-move')
+  element.style.left = trash.offsetLeft + trash.clientWidth / 2 + 'px';
+  element.style.top = trash.offsetTop + trash.clientHeight / 2 + 'px';
+  element.style.transform = 'rotate(360deg)';
+  //animation code end
+  
   //remove element from collections and property children
   if (elements.has(element)) {
     //remove child from parent element in elements collection
     const parent = elements.get(element).parent;
     if (elements.has(parent)) {
       elements.get(parent).children = elements.get(parent)
-                                              .children.filter(child => child != element);
+      .children.filter(child => child != element);
     }
     //change value parent of all children to 'deleted'
     elements.get(element).children.forEach(child => {
       elements.get(child).parent = 'deleted';
     })
-    //remove element
-    elements.delete(element);
   }
-  element.remove();
+  elements.delete(element);
+  updateCoordinatesList();
+  drawLineOnCanvasBG();
+  
+  element.addEventListener('transitionend', () => {
+    element.remove();
+  }, {once: true});
+
   return true;
 }
 
