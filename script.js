@@ -363,3 +363,9 @@ function updateOutputList(list){
   outputList.innerHTML = '<h2>Structure</h2>' + firstPart + lastPart;
   return list;
 }
+
+//limited coord
+// const min = 0
+// const max = 10
+// const value = 15
+// const limitedValue = Math.max(min, Math.min(max, value))
