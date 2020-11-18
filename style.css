@@ -177,6 +177,7 @@ body {
   height: 150px;
   position: relative;
   cursor: pointer;
+  transition: all 0.1s linear;
 }
 
 .trash__head {
@@ -258,6 +259,23 @@ body {
   border-radius: 5% 5% 20% 20% / 10% 10% 90% 90%;
   transform: translateX(-50%);
   background-color: #fff;
+}
+
+.trash__list {
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #fff;
+  width: 10px;
+  height: 10px;
+  z-index: 2;
+  overflow: hidden;
+  transition: height 1s linear;
+}
+.trash__list div {
+  margin-bottom: 5px;
+  padding: 0 10px;
 }
 /* trash style end */
 
