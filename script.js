@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const centerCoord = getCenterCoordDrawArea()
   changeCoordInElementsCollection(moveElement(firstElement, centerCoord));
   updateTextList();
-  updateOutputList(textList);
+  updateOutputList(getOutputStructure(elements, [firstElement]));
   //sizing bacground canvas = drawArea 
   resizeCanvas();
 
@@ -61,7 +61,7 @@ document.addEventListener('mousedown', event => {
                         appendElement( createElement(event.target), drawArea)
                       ), event );
     updateTextList();
-    updateOutputList(textList);
+    
     // console.log(tempElem);
     addParentToElemFromElementsCollection(tempElem, event.target);
     addChildrenToParentElem(event.target, tempElem);
@@ -86,6 +86,7 @@ document.addEventListener('mousedown', event => {
 })
 //end moving
 document.addEventListener('mouseup', (event) => {
+  updateOutputList(getOutputStructure(elements, [firstElement]));
   document.removeEventListener('mousemove', moveTempElement);
   document.removeEventListener('mousemove', updateCoordinatesList);
   document.removeEventListener('mousemove', drawLineOnCanvasBG);
@@ -104,7 +105,7 @@ document.addEventListener('click', event => {
         event.target.parentNode.firstChild.textContent = event.target.value;
         elements.get(event.target.parentNode).value = event.target.value;
         updateTextList();
-        updateOutputList(textList);
+        updateOutputList(getOutputStructure(elements, [firstElement]));
         event.target.classList.add('hide');
         event.target.removeEventListener('keydown', forListenerKeydown);
       }
@@ -219,21 +220,16 @@ function moveElementByBtn (element, event) {
   return element;
 }
 
-//I/O = element / true;
+//I/O = element / element;
 function correctPosition(element) {
-  if (element.offsetTop < drawArea.offsetTop) element.style.top = drawArea.offsetTop + 'px';
-  if (element.offsetTop + element.clientHeight >
-      drawArea.offsetTop + drawArea.clientHeight) element.style.top = drawArea.offsetTop
-                                                                    + drawArea.clientHeight
-                                                                    - element.clientHeight
-                                                                    + 'px';
-  if (element.offsetLeft < drawArea.offsetLeft) element.style.left = drawArea.offsetLeft + 'px';
-  if (element.offsetLeft + element.clientWidth >
-      drawArea.offsetLeft + drawArea.clientWidth) element.style.left =  drawArea.offsetLeft
-                                                                      + drawArea.clientWidth
-                                                                      - element.clientWidth
-                                                                      + 'px';
-  return true;
+  const minY = drawArea.offsetTop;
+  const maxY = drawArea.offsetTop + drawArea.clientHeight - element.clientHeight;
+  element.style.top = Math.max(minY, Math.min(maxY, element.offsetTop)) + 'px';
+
+  const minX = drawArea.offsetLeft;
+  const maxX = drawArea.offsetLeft + drawArea.clientWidth - element.clientWidth;
+  element.style.left = Math.max(minX, Math.min(maxX, element.offsetLeft)) + 'px';
+  return element;
 }
 
 //I/O = object / object (main element)
@@ -340,32 +336,27 @@ function updateTextList() {
   return true;
 }
 
+
+
 //list as [element, level, value] / output: list
 function updateOutputList(list){
-  textList.sort( (a, b) => a[1] - b[1] );
-  let firstPart = '<ul><li>';
-  let lastPart = '</li></ul>';
-
-  // debugger;
-  for (let i = 0; i < list.length; i++){
-    if (i === 0) {
-      firstPart += list[i][2];
-    } else {
-      if (list[i][1] === list[i - 1][1]){
-        firstPart += `</li><li>${list[i][2]}`;
-      } else {
-        firstPart += `<ul><li>${list[i][2]}`;
-        lastPart += '</li></ul>' + lastPart;
-      }
-    }
-  }
-
-  outputList.innerHTML = '<h2>Structure</h2>' + firstPart + lastPart;
+  let outputStructure = list.join('');
+  outputList.innerHTML = '<h2>Structure</h2>' + outputStructure;
   return list;
 }
 
-//limited coord
-// const min = 0
-// const max = 10
-// const value = 15
-// const limitedValue = Math.max(min, Math.min(max, value))
+//I/O = collection (Map), array / array
+//For first run getOutputStructure(elements, [firstElement])
+function getOutputStructure(col, arr) {
+  if (arr.length < 1) return '';
+  const result = [];
+  result.push('<ul>');
+  arr.forEach(elem => {
+    if (col.has(elem)) {
+      result.push([`<li>${col.get(elem).value}`,
+                    getOutputStructure(col, col.get(elem).children)]);
+    }
+  })
+  result.push('</li></ul>');
+  return result.flat(Infinity).filter(Boolean);
+}

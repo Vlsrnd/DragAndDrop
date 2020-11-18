@@ -162,6 +162,9 @@ body {
   .text-output {
     grid-area: text-output;
   }
+  .text-output ul {
+   padding-left: 10px;
+  }
 /* text-output style end */
 
 /* trash style start */
