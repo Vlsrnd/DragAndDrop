@@ -1,3 +1,6 @@
+export {pullPairCoordinates, updateCoordinatesList,
+        changeCoordInElementsCollection, getCenterCoordDrawArea};
+
 //function create array [[[x0,y0], [x1,y1]], [[x0,y0], [x1,y1]] ... [[x0,y0], [x1,y1]]]
 //for couple parent-child
 function pullPairCoordinates() {
