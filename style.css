@@ -274,8 +274,14 @@ body {
   transition: height 1s linear;
 }
 .trash__list div {
-  margin-bottom: 5px;
-  padding: 0 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+.trash__list div:hover {
+  font-weight: 700;
+}
+.trash__list div:nth-child(2n + 1){
+  background-color: #505050;
 }
 /* trash style end */
 

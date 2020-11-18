@@ -361,7 +361,7 @@ function getOutputStructure(col, arr) {
   return result.flat(Infinity).filter(Boolean);
 }
 
-// open trash list
+// open trash list, return trashList
 function openTrash() {
   if (!trashCollection.size) {
     trash.style.transform = 'scale(1.2)';
@@ -378,9 +378,11 @@ function openTrash() {
 
     const trashList = Array.from(trashCollection.entries())
                             .map(elem => [elem[0], elem[1].value]);
-    trashList.forEach(elem => {
+    trashList.forEach((elem, index) => {
       const deletedElem = document.createElement('div');
       deletedElem.textContent = elem[1];
+      deletedElem.dataset.index = index;
+      console.log(elem[0]);
       mainTrashElement.append(deletedElem);
 
       //add listener
@@ -399,6 +401,20 @@ function openTrash() {
       mainTrashElement.style.height = trash.clientHeight + 50 + 'px';
     })
   }
+  return trashList;
+}
+
+//
+function restoreElement(event) {
+  //Взять dataset.index
+  //Закрыть mainTrashElement, удалить его
+  //взять из trashList элемент и выбрать его в trashCollection
+  //переместить его из trashCollection в elements
+  //воcстановить свойства parent и children
+  //создать элемент
+  //переместить его по координатам
+  //обновить лист координат
+  //обновить канвас
 }
 
 trash.addEventListener('click', openTrash);
