@@ -1,5 +1,5 @@
 // open trash list, return trashList
-export function openTrash() {
+export function openTrash(trashCollection, trash) {
   if (!trashCollection.size) {
     trash.style.transform = 'scale(1.2)';
     setTimeout(() => {

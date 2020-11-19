@@ -1,18 +1,9 @@
-export {moveElement, moveElementByBtn, correctPosition, changeCoordInElementsCollection, curryMoveElementFunc};
+export {moveElement, correctPosition, changeCoordInElementsCollection, curryMoveElementFunc};
 
 //I/O = object, event / object (main element)
 function moveElement(element, collection, event, drawArea) {
   element.style.top = event.clientY - element.clientHeight / 2 + 'px';
   element.style.left = event.clientX - element.clientWidth / 2 + 'px';
-  correctPosition(element, drawArea);
-  changeCoordInElementsCollection(element, collection);
-  return element;
-}
-
-//I/O = object, event / object (main element)
-function moveElementByBtn (element, collection, event, drawArea) {
-  element.style.top = event.clientY - element.clientHeight / 2 + 'px';
-  element.style.left = event.clientX - element.clientWidth + 'px';
   correctPosition(element, drawArea);
   changeCoordInElementsCollection(element, collection);
   return element;
@@ -29,8 +20,6 @@ function correctPosition(element, drawArea) {
   element.style.left = Math.max(minX, Math.min(maxX, element.offsetLeft)) + 'px';
   return element;
 }
-
-
 
 //I/O = object / object (main element)
 function changeCoordInElementsCollection(element, collection) {

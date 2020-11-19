@@ -1,14 +1,15 @@
 //import {sayHi} from './sayHi.js'
 
 
-import {pullPairCoordinates, updateCoordinatesList, getCenterCoordDrawArea} from './coord.js';
+import {pullPairCoordinates, getCenterCoordDrawArea} from './coord.js';
 import {openTrash} from './openTrash.js';
-import {moveElement, moveElementByBtn, correctPosition, curryMoveElementFunc, changeCoordInElementsCollection} from './move.js';
+import {moveElement, correctPosition, changeCoordInElementsCollection} from './move.js';
 import {addElemToElementsCollection, addParentToElemFromElementsCollection, addChildrenToParentElem} from './elemCollections.js';
 import {updateTextList, updateOutputList, getOutputStructure} from './outText.js';
 import {resizeCanvas, resizeWindow} from './resize.js';
 import {createElement, appendElement} from './create.js';
 import {drawLineOnCanvasBG} from './canvas.js';
+import {removeElement} from './remove.js';
 
 const firstElement = document.querySelector('#firstElement');
 const drawArea = document.querySelector('.draw-area');
@@ -25,6 +26,7 @@ const elements = new Map();
 let linesCoordinates = pullPairCoordinates(elements);
 let textList = [];
 const trashCollection = new Map();
+console.log(trashCollection)
 
 /*
 Example
@@ -49,8 +51,7 @@ elements.set(firstElement, {
 
 document.addEventListener('DOMContentLoaded', compositionLoad, {once: true})
 //create element and moving this of move element
-//start moving
-document.addEventListener('mousedown', compositionMoveStart);
+document.addEventListener('mousedown', compositionMoveElement);
 
 //editing the text into element
 //change prop value for element in elements collrection
@@ -62,7 +63,7 @@ document.addEventListener('click', compositionRemove);
 //no comments
 window.addEventListener('resize', compositionResize);
 
-trash.addEventListener('click', openTrash);
+trash.addEventListener('click', openTrashFunc);
 
 
 
@@ -103,61 +104,90 @@ function compositionLoad() {
 
 function compositionResize() {
   resizeCanvas(canvasBG, drawArea);
-  resizeWindow(elements, w, h);
+  resizeWindow(elements, w, h, correctPosition, changeCoordInElementsCollection);
   updateCoordinatesList();
   drawLineOnCanvasBG(ctxBG, canvasBG, linesCoordinates);
 }
 
 function compositionRemove(event) {
   if (event.target.dataset.func === 'remove') {
-    removeElement(event.target.parentNode);
-    // updateCoordinatesList();
-    // drawLineOnCanvasBG();
+    removeElement(event.target.parentNode, elements, trashCollection, trash, trashHead);
+    updateCoordinatesList();
+    drawLineOnCanvasBG(ctxBG, canvasBG, linesCoordinates);
+    updateTextList(textList, elements);
+    updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
   }
 }
 
 
-function compositionMoveStart(event) {
+function compositionMoveElement(event) {
+  function move(element, drawArea, collection) {
+    return function(event){
+      element.style.left = event.clientX - element.clientWidth + 'px';
+      element.style.top = event.clientY - element.clientHeight / 2 +'px';
+      correctPosition(element, drawArea);
+      changeCoordInElementsCollection(element, collection);
+    }
+  }
+  
   if (event.target.dataset.name === 'element') {
     // debugger;
-    //bind function moveElement
     const newElement = createElement(event.target);
     appendElement(newElement, drawArea);
     addElemToElementsCollection(newElement, elements);
 
-    function moveAt (event) {
-      newElement.style.top = event.clientY - newElement.clientHeight / 2 + 'px';
-      newElement.style.left = event.clientX - newElement.clientWidth / 2 + 'px';
-      correctPosition(newElement, drawArea);
-      changeCoordInElementsCollection(newElement, elements);
-    }
-
+    const moveAt = move(newElement, drawArea, elements);
     moveAt(event);
-
+    
     updateTextList(textList, elements);
     addParentToElemFromElementsCollection(newElement, event.target, elements);
     addChildrenToParentElem(event.target, newElement, elements);
-
-
+        
     //moving
     document.addEventListener('mousemove', moveAt);
     document.addEventListener('mousemove', updateCoordinatesList);
-    document.addEventListener('mousemove', drawLineOnCanvasBG);
+    document.addEventListener('mousemove', drawLine);
+    
+    document.onmouseup = () => {
+      updateTextList(textList, elements);
+      updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
+      document.removeEventListener('mousemove', moveAt);
+      document.removeEventListener('mousemove', updateCoordinatesList);
+      document.removeEventListener('mousemove', drawLine);
+      document.onmouseup = null;
+    }
+  } else if (event.target.dataset.func === 'move') {
+    //moving
+    const moveAt = move(event.target.parentNode, drawArea, elements);
+
+    document.addEventListener('mousemove', moveAt);
+    document.addEventListener('mousemove', updateCoordinatesList);
+    document.addEventListener('mousemove', drawLine);
 
     document.onmouseup = () => {
       document.removeEventListener('mousemove', moveAt);
       document.removeEventListener('mousemove', updateCoordinatesList);
-      document.removeEventListener('mousemove', drawLineOnCanvasBG);
+      document.removeEventListener('mousemove', drawLine);
       document.onmouseup = null;
     }
-  } else if (event.target.dataset.func === 'move') {
-    //bind function moveElement
-    const tempElem = moveElementByBtn( event.target.parentNode, elements, event, drawArea);
-    moveTempElement = curryMoveElementFunc(moveElementByBtn, tempElem);
-    //moving
-    document.addEventListener('mousemove', moveTempElement);
-    document.addEventListener('mousemove', updateCoordinatesList);
-    document.addEventListener('mousemove', drawLineOnCanvasBG);
   }
 }
 
+/////////////////////////////////
+//Simple function for listeners//
+////////////////////////////////
+function drawLine() {
+  drawLineOnCanvasBG(ctxBG, canvasBG, linesCoordinates);
+  return true
+}
+//update coodrdinates list
+function updateCoordinatesList() {
+  linesCoordinates = pullPairCoordinates(elements);
+  return true;
+}
+
+//
+function openTrashFunc() {
+  openTrash(trashCollection, trash);
+  return true;
+}

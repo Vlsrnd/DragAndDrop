@@ -1,4 +1,4 @@
-export {pullPairCoordinates, updateCoordinatesList, getCenterCoordDrawArea};
+export {pullPairCoordinates, getCenterCoordDrawArea}; 
 
 //function create array [[[x0,y0], [x1,y1]], [[x0,y0], [x1,y1]] ... [[x0,y0], [x1,y1]]]
 //for couple parent-child
@@ -15,11 +15,7 @@ function pullPairCoordinates(collection) {
   })
   return pairParentCoordChildCoord.flat();
 }
-//update coodrdinates list
-function updateCoordinatesList() {
-  linesCoordinates = pullPairCoordinates();
-  return true;
-}
+
 
 
 //I/O = - / object {clientX: Number, clientY: Number};

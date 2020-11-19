@@ -1,8 +1,10 @@
 //I/O = object / if on board last element return this, else return trus
-function removeElement(element) {
-  if (elements.size <= 1) return element;
+export function removeElement(element, elementsCollection, trashCollection, trash,
+                              trashHead) {
+  if (elementsCollection.size <= 1) return element;
 
-  trashCollection.set(element, elements.get(element)) 
+  trashCollection.set(element, elementsCollection.get(element)) 
+  console.log(trashCollection);
   //animation
   element.classList.add('element-smooth-move')
   element.style.left = trash.offsetLeft + trash.clientWidth / 2 + 'px';
@@ -12,25 +14,23 @@ function removeElement(element) {
   //animation code end
 
   //remove element from collections and property children
-  if (elements.has(element)) {
+  if (elementsCollection.has(element)) {
   //remove child from parent element in elements collection
-  const parent = elements.get(element).parent;
-  if (elements.has(parent)) {
-  elements.get(parent).children = elements.get(parent)
+  const parent = elementsCollection.get(element).parent;
+  if (elementsCollection.has(parent)) {
+    elementsCollection.get(parent).children = elementsCollection.get(parent)
   .children.filter(child => child != element);
   }
   //change value parent of all children to 'deleted'
-  elements.get(element).children.forEach(child => {
-  elements.get(child).parent = 'deleted';
+  elementsCollection.get(element).children.forEach(child => {
+    elementsCollection.get(child).parent = 'deleted';
   })
   }
-  elements.delete(element);
-  updateCoordinatesList();
-  drawLineOnCanvasBG();
+  elementsCollection.delete(element);
   
   element.addEventListener('transitionend', () => {
-  trashHead.classList.remove('trash__head-animate');
-  element.remove();
+    trashHead.classList.remove('trash__head-animate');
+    element.remove();
   }, {once: true});
 
   return true;
