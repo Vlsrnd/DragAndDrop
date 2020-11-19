@@ -1,5 +1,3 @@
-export {drawLineOnCanvasBG, curryMoveElementFunc};
-
 //draw coupling lines
 //I/O = context of canvas, canvas, array with [[x0,y0], [x1,y1]] / true
 export function drawLineOnCanvasBG(context, canvas, coord) {
@@ -17,8 +15,3 @@ export function drawLineOnCanvasBG(context, canvas, coord) {
   return true;
 }
 
-//I/O = element / curry function moveElement(event) binded with element
-function curryMoveElementFunc (func, elem, ) {
-  drawLineOnCanvasBG();
-  return event => func(elem, event);
-}

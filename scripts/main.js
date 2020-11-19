@@ -2,9 +2,8 @@
 
 
 import {pullPairCoordinates, updateCoordinatesList, getCenterCoordDrawArea} from './coord.js';
-import {edit} from './edit.js';
 import {openTrash} from './openTrash.js';
-import {moveElement, moveElementByBtn, curryMoveElementFunc, changeCoordInElementsCollection} from './move.js';
+import {moveElement, moveElementByBtn, correctPosition, curryMoveElementFunc, changeCoordInElementsCollection} from './move.js';
 import {addElemToElementsCollection, addParentToElemFromElementsCollection, addChildrenToParentElem} from './elemCollections.js';
 import {updateTextList, updateOutputList, getOutputStructure} from './outText.js';
 import {resizeCanvas, resizeWindow} from './resize.js';
@@ -52,12 +51,10 @@ document.addEventListener('DOMContentLoaded', compositionLoad, {once: true})
 //create element and moving this of move element
 //start moving
 document.addEventListener('mousedown', compositionMoveStart);
-//end moving
-document.addEventListener('mouseup', compositionMoveEnd);
 
 //editing the text into element
 //change prop value for element in elements collrection
-document.addEventListener('click', edit);
+document.addEventListener('click', compositionEdit);
 
 //removing the element
 document.addEventListener('click', compositionRemove);
@@ -72,6 +69,27 @@ trash.addEventListener('click', openTrash);
 /////////////////////////
 //Composition functions//
 /////////////////////////
+
+function compositionEdit(event) {
+  if (event.target.dataset.func === 'edit') {
+    event.target.previousSibling.textContent = '';
+    event.target.nextElementSibling.classList.remove('hide');
+    event.target.nextElementSibling.focus();
+    
+    function forListenerKeydown(event) {
+      if (event.keyCode === 13) {
+        event.target.parentNode.firstChild.textContent = event.target.value;
+        elements.get(event.target.parentNode).value = event.target.value;
+        updateTextList(textList, elements);
+        updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
+        event.target.classList.add('hide');
+        event.target.removeEventListener('keydown', forListenerKeydown);
+      }
+    }
+    
+    event.target.nextElementSibling.addEventListener('keydown', forListenerKeydown)
+  }
+}
 
 function compositionLoad() {
   //firstElement move to the center of screen
@@ -103,20 +121,35 @@ function compositionMoveStart(event) {
   if (event.target.dataset.name === 'element') {
     // debugger;
     //bind function moveElement
-    const tempElem = moveElement(
-                      addElemToElementsCollection( 
-                        appendElement( createElement(event.target), drawArea), elements
-                      ), elements, event, drawArea );
+    const newElement = createElement(event.target);
+    appendElement(newElement, drawArea);
+    addElemToElementsCollection(newElement, elements);
+
+    function moveAt (event) {
+      newElement.style.top = event.clientY - newElement.clientHeight / 2 + 'px';
+      newElement.style.left = event.clientX - newElement.clientWidth / 2 + 'px';
+      correctPosition(newElement, drawArea);
+      changeCoordInElementsCollection(newElement, elements);
+    }
+
+    moveAt(event);
+
     updateTextList(textList, elements);
-    
-    // console.log(tempElem);
-    addParentToElemFromElementsCollection(tempElem, event.target, elements);
-    addChildrenToParentElem(event.target, tempElem, elements);
-    moveTempElement = curryMoveElementFunc(moveElement, tempElem);
+    addParentToElemFromElementsCollection(newElement, event.target, elements);
+    addChildrenToParentElem(event.target, newElement, elements);
+
+
     //moving
-    document.addEventListener('mousemove', moveTempElement);
+    document.addEventListener('mousemove', moveAt);
     document.addEventListener('mousemove', updateCoordinatesList);
     document.addEventListener('mousemove', drawLineOnCanvasBG);
+
+    document.onmouseup = () => {
+      document.removeEventListener('mousemove', moveAt);
+      document.removeEventListener('mousemove', updateCoordinatesList);
+      document.removeEventListener('mousemove', drawLineOnCanvasBG);
+      document.onmouseup = null;
+    }
   } else if (event.target.dataset.func === 'move') {
     //bind function moveElement
     const tempElem = moveElementByBtn( event.target.parentNode, elements, event, drawArea);
@@ -128,9 +161,3 @@ function compositionMoveStart(event) {
   }
 }
 
-function compositionMoveEnd(event) {
-  updateOutputList(getOutputStructure(elements, [firstElement]));
-  document.removeEventListener('mousemove', moveTempElement);
-  document.removeEventListener('mousemove', updateCoordinatesList);
-  document.removeEventListener('mousemove', drawLineOnCanvasBG);
-}

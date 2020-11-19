@@ -1,4 +1,4 @@
-export {moveElement, moveElementByBtn, changeCoordInElementsCollection};
+export {moveElement, moveElementByBtn, correctPosition, changeCoordInElementsCollection, curryMoveElementFunc};
 
 //I/O = object, event / object (main element)
 function moveElement(element, collection, event, drawArea) {
@@ -37,4 +37,9 @@ function changeCoordInElementsCollection(element, collection) {
   collection.get(element).coordX = element.offsetLeft + element.clientWidth / 2;
   collection.get(element).coordY = element.offsetTop + element.clientHeight / 2;
   return element;
+}
+
+//I/O = element / curry function moveElement(event) binded with element
+function curryMoveElementFunc (func, elem) {
+  return event => func(elem, event);
 }
