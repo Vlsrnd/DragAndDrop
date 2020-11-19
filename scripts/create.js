@@ -6,7 +6,7 @@ function createElement(obj) {
   newElement.classList.add('element');
   newElement.textContent = 'New';
   newElement.dataset.level = +obj.dataset.level + 1;
-  newElement.dataset.name = 'element';
+  newElement.dataset.func = 'element';
   newElement.insertAdjacentHTML('beforeend', 
   '<div class="element__btn element__edit" data-func="edit">&#9998;</div>'
   + '<input class="input hide" type="text"></input>'

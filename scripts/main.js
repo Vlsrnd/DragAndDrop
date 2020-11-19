@@ -130,7 +130,7 @@ function compositionMoveElement(event) {
     }
   }
   
-  if (event.target.dataset.name === 'element') {
+  if (event.target.dataset.func === 'element') {
     // debugger;
     const newElement = createElement(event.target);
     appendElement(newElement, drawArea);
@@ -143,6 +143,7 @@ function compositionMoveElement(event) {
     addParentToElemFromElementsCollection(newElement, event.target, elements);
     addChildrenToParentElem(event.target, newElement, elements);
         
+    
     //moving
     document.addEventListener('mousemove', moveAt);
     document.addEventListener('mousemove', updateCoordinatesList);
