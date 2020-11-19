@@ -1,11 +1,13 @@
-//I/O = - / true
-function updateTextList() {
-  textList = [...Array.from(elements.entries()).map(elem => [elem[0], +elem[1].level, elem[1].value])];
-  return true;
+export {updateTextList, updateOutputList, getOutputStructure};
+
+//I/O = changable var, collection of elements / array
+function updateTextList(textList, collection) {
+  textList = [...Array.from(collection.entries()).map(elem => [elem[0], +elem[1].level, elem[1].value])];
+  return textList;
 }
 
-//list as [element, level, value] / output: list
-function updateOutputList(list){
+//list as [element, level, value], element which need to update / output: list
+function updateOutputList(list, outputList){
   let outputStructure = list.join('');
   outputList.innerHTML = '<h2>Structure</h2>' + outputStructure;
   return list;

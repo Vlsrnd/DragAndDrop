@@ -1,3 +1,5 @@
+export {createElement, appendElement}
+
 //I/O = obj with current level, event / div with level+1 and structure
 function createElement(obj) {
   const newElement = document.createElement('div');

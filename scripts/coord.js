@@ -1,13 +1,12 @@
-export {pullPairCoordinates, updateCoordinatesList,
-        changeCoordInElementsCollection, getCenterCoordDrawArea};
+export {pullPairCoordinates, updateCoordinatesList, getCenterCoordDrawArea};
 
 //function create array [[[x0,y0], [x1,y1]], [[x0,y0], [x1,y1]] ... [[x0,y0], [x1,y1]]]
 //for couple parent-child
-function pullPairCoordinates() {
-  const arrElements = Array.from(elements.values())
+function pullPairCoordinates(collection) {
+  const arrElements = Array.from(collection.values())
   const pairParentCoordChildrenCoord = arrElements.map(elem => 
   [[elem.coordX, elem.coordY], 
-  elem.children.map(child => [elements.get(child).coordX, elements.get(child).coordY])]);
+  elem.children.map(child => [collection.get(child).coordX, collection.get(child).coordY])]);
   //transform[[parentCoord], [[childCoord], [childCoord], ... [childCoord]]] => 
   // => [[[parentCoord], [childCoord]], [[parentCoord], [childCoord]] ...]
   const pairParentCoordChildCoord  = pairParentCoordChildrenCoord.map(elem => {
@@ -22,15 +21,9 @@ function updateCoordinatesList() {
   return true;
 }
 
-//I/O = object / object (main element)
-function changeCoordInElementsCollection(element) {
-  elements.get(element).coordX = element.offsetLeft + element.clientWidth / 2;
-  elements.get(element).coordY = element.offsetTop + element.clientHeight / 2;
-  return element;
-}
 
 //I/O = - / object {clientX: Number, clientY: Number};
-function getCenterCoordDrawArea() {
+function getCenterCoordDrawArea(drawArea) {
   return {clientX: +drawArea.offsetLeft + drawArea.clientWidth / 2,
           clientY: +drawArea.offsetTop + drawArea.clientHeight / 2}
 }

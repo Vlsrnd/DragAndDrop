@@ -1,16 +1,19 @@
+export {resizeCanvas, resizeWindow};
+
 //resize canvas
-function resizeCanvas() {
-  canvasBG.setAttribute('width', `${drawArea.clientWidth}px`);
-  canvasBG.setAttribute('height', `${drawArea.clientHeight}px`);
+function resizeCanvas(canvas, drawArea) {
+  canvas.setAttribute('width', `${drawArea.clientWidth}px`);
+  canvas.setAttribute('height', `${drawArea.clientHeight}px`);
   return true;
 }
 
 
 //reposition elements
-function resizeWindow() {
+//collection of elements, width window, height window 
+function resizeWindow(collection, w, h) {
   const deltaH = document.documentElement.clientHeight / h;
   const deltaW = document.documentElement.clientWidth / w;
-  Array.from(elements.keys()).forEach(elem => {
+  Array.from(collection.keys()).forEach(elem => {
     elem.style.top = elem.offsetTop * deltaH + 'px';
     elem.style.left = elem.offsetLeft * deltaW + 'px';
     correctPosition(elem);

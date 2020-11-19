@@ -1,6 +1,8 @@
+export {addElemToElementsCollection, addParentToElemFromElementsCollection, addChildrenToParentElem};
+
 //I/O = object, object (main element)
-function addElemToElementsCollection(elem) {
-  elements.set(elem, {
+function addElemToElementsCollection(elem, collection) {
+  collection.set(elem, {
   level: elem.dataset.level,
   value: 'new',
   parent: null,
@@ -12,13 +14,13 @@ function addElemToElementsCollection(elem) {
 }
 
 //I/O = object / object (main element)
-function addParentToElemFromElementsCollection(elem, parent) {
-  elements.get(elem).parent = parent;
+function addParentToElemFromElementsCollection(elem, parent, collection) {
+  collection.get(elem).parent = parent;
   return elem
 }
 
 //I/O = object, object / object (child)
-function addChildrenToParentElem(parent, child) {
-  elements.get(parent).children.push(child);
+function addChildrenToParentElem(parent, child, collection) {
+  collection.get(parent).children.push(child);
   return child;
 }

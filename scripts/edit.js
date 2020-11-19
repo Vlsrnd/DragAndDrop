@@ -1,4 +1,4 @@
-function edit(event) {
+export function edit(event) {
   if (event.target.dataset.func === 'edit') {
     event.target.previousSibling.textContent = '';
     event.target.nextElementSibling.classList.remove('hide');
