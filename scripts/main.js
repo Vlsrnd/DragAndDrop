@@ -1,22 +1,25 @@
 'use strict';
-export {drawArea, canvasBG, trashCollection};
-import {resizeCanvas} from './resize.js';
+export {drawArea, drawAreaWidth, drawAreaHeight, canvasBG, elementsCollection, trashCollection};
+import {resizeCanvas, repositionElements} from './resize.js';
 
 const drawArea = document.querySelector('.draw-area'),
+      drawAreaWidth = drawArea.clientWidth,
+      drawAreaHeight = drawArea.clientHeight,
       canvasBG = document.getElementById('canvas-bg'),
       startScreen = document.querySelector('.start'),
       startButton = document.querySelector('.start__btn'),
       elementsCollection = new Map(),
       trashCollection = new Map();
-
 window.addEventListener('load', () => {
   resizeCanvas();
   const elem = new Element(null, 0, 0, drawArea, elementsCollection).create();
-  elem.move({clientX: drawArea.offsetLeft + drawArea.clientWidth / 2, 
-             clientY: drawArea.offsetTop + elem.element.clientHeight / 2});
+  elem.move({clientX: drawArea.clientWidth / 2, 
+             clientY: elem.element.clientHeight / 2});
+  // debugger;
 })
 window.addEventListener('resize', () => {
   resizeCanvas();
+  repositionElements();
 })
 //for desktop
 document.addEventListener('mousedown', event => {
@@ -57,10 +60,6 @@ class Element {
     this.destination = destination;
     this.collection = collection;
     this.moveLimits = {
-      // top: this.destination.offsetTop,
-      // bottom: this.destination.offsetTop + this.destination.clientHeight,
-      // left: this.destination.offsetLeft,
-      // right: this.destination.offsetLeft + this.destination.clientWidth,
       top: 0,
       bottom: this.destination.clientHeight,
       left: 0,
@@ -89,8 +88,8 @@ class Element {
   }
 
   move({clientX, clientY}) {
-    const x = clientX - this.element.clientWidth / 2;
-    const y = clientY - this.element.clientHeight / 2;
+    const x = clientX - this.destination.offsetLeft - this.element.clientWidth / 2;
+    const y = clientY - this.destination.offsetTop - this.element.clientHeight / 2;
     this.element.style.left = `${Math.max(this.moveLimits.left, Math.min(this.moveLimits.right - this.element.clientWidth, x))}px`;
     this.element.style.top = `${Math.max(this.moveLimits.top, Math.min(this.moveLimits.bottom - this.element.clientHeight, y))}px`;
     this.clientX = this.element.offsetLeft + this.element.clientWidth / 2;
@@ -126,3 +125,5 @@ class Element {
     this.element.remove();
   }
 }
+
+

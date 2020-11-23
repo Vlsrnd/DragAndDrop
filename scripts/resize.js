@@ -1,10 +1,15 @@
-import {drawArea, canvasBG} from './main.js';
-export {resizeCanvas};
+import {drawArea, drawAreaWidth, drawAreaHeight, canvasBG, elementsCollection} from './main.js';
+export {resizeCanvas, repositionElements};
 
 function resizeCanvas() {
-  // canvasBG.style.position = 'absolute';
-  // canvasBG.style.top = 0;
-  // canvasBG.style.left = 0;
   canvasBG.setAttribute('width', drawArea.clientWidth);
   canvasBG.setAttribute('height', drawArea.clientHeight);
+}
+
+function repositionElements() {
+  [...elementsCollection.keys()].forEach(element => {
+    elementsCollection.get(element).clientX *= drawAreaWidth / drawArea.clientWidth;
+    elementsCollection.get(element).clientY *= drawAreaHeight / drawArea.clientHeight;
+    elementsCollection.get(element).move(this);
+  })
 }
