@@ -1,194 +1,128 @@
-//import {sayHi} from './sayHi.js'
+'use strict';
+export {drawArea, canvasBG, trashCollection};
+import {resizeCanvas} from './resize.js';
 
+const drawArea = document.querySelector('.draw-area'),
+      canvasBG = document.getElementById('canvas-bg'),
+      startScreen = document.querySelector('.start'),
+      startButton = document.querySelector('.start__btn'),
+      elementsCollection = new Map(),
+      trashCollection = new Map();
 
-import {pullPairCoordinates, getCenterCoordDrawArea} from './coord.js';
-import {openTrash} from './openTrash.js';
-import {moveElement, correctPosition, changeCoordInElementsCollection} from './move.js';
-import {addElemToElementsCollection, addParentToElemFromElementsCollection, addChildrenToParentElem} from './elemCollections.js';
-import {updateTextList, updateOutputList, getOutputStructure} from './outText.js';
-import {resizeCanvas, resizeWindow} from './resize.js';
-import {createElement, appendElement} from './create.js';
-import {drawLineOnCanvasBG} from './canvas.js';
-import {removeElement} from './remove.js';
-
-const firstElement = document.querySelector('#firstElement');
-const drawArea = document.querySelector('.draw-area');
-const canvasBG = document.getElementById('canvas-bg');
-const ctxBG = canvasBG.getContext('2d');
-const outputList = document.querySelector('.text-output');
-const trash = document.querySelector('.trash');
-const trashHead = document.querySelector('.trash__head');
-let w = document.documentElement.clientWidth;
-let h = document.documentElement.clientHeight;
-let moveTempElement;
-
-const elements = new Map();
-let linesCoordinates = pullPairCoordinates(elements);
-let textList = [];
-const trashCollection = new Map();
-console.log(trashCollection)
-
-/*
-Example
-structure for element  {
-  level: (Number) element.dataset.level,
-  value: (String) element.textContent,
-  parent: (Object) element from which the current element follows,
-  children: (Array(Object)) elements that follow from the current element
-  coordX: (Number) coordinates of center
-  coordY: (Number) coordinates of center 
-}
-*/
-elements.set(firstElement, {
-  level: '0',
-  value: 'first',
-  parent: null,
-  children: [],
-  coordX: null,
-  coordY: null,
+window.addEventListener('load', () => {
+  resizeCanvas();
+  const elem = new Element(null, 0, 0, drawArea, elementsCollection).create();
+  elem.move({clientX: drawArea.offsetLeft + drawArea.clientWidth / 2, 
+             clientY: drawArea.offsetTop + elem.element.clientHeight / 2});
+})
+window.addEventListener('resize', () => {
+  resizeCanvas();
+})
+//for desktop
+document.addEventListener('mousedown', event => {
+  if (event.target.dataset.func === 'create'){
+    const element = new Element(event.target.parentElement, event.clientX, event.clientY, drawArea, elementsCollection).create();
+    const bindedElementMove = element.move.bind(element);
+    document.addEventListener('mousemove', bindedElementMove);
+    document.addEventListener('mouseup', () => {
+      document.removeEventListener('mousemove', bindedElementMove);
+    })
+  } else if (event.target.dataset.func === 'element') {
+    const targetElement = elementsCollection.get(event.target.parentElement);
+    const bindedElementMove = targetElement.move.bind(targetElement);
+    document.addEventListener('mousemove', bindedElementMove);
+    document.addEventListener('mouseup', () => {
+      document.removeEventListener('mousemove', bindedElementMove);
+    })
+  }
 })
 
 
-document.addEventListener('DOMContentLoaded', compositionLoad, {once: true})
-//create element and moving this of move element
-document.addEventListener('mousedown', compositionMoveElement);
-
-//editing the text into element
-//change prop value for element in elements collrection
-document.addEventListener('click', compositionEdit);
-
-//removing the element
-document.addEventListener('click', compositionRemove);
-
-//no comments
-window.addEventListener('resize', compositionResize);
-
-trash.addEventListener('click', openTrashFunc);
-
-
-
-/////////////////////////
-//Composition functions//
-/////////////////////////
-
-function compositionEdit(event) {
-  if (event.target.dataset.func === 'edit') {
-    event.target.previousSibling.textContent = '';
-    event.target.nextElementSibling.classList.remove('hide');
-    event.target.nextElementSibling.focus();
-    
-    function forListenerKeydown(event) {
-      if (event.keyCode === 13) {
-        event.target.parentNode.firstChild.textContent = event.target.value;
-        elements.get(event.target.parentNode).value = event.target.value;
-        updateTextList(textList, elements);
-        updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
-        event.target.classList.add('hide');
-        event.target.removeEventListener('keydown', forListenerKeydown);
-      }
-    }
-    
-    event.target.nextElementSibling.addEventListener('keydown', forListenerKeydown)
+document.addEventListener('click', event => {
+  if (event.target.dataset.func === 'edit'){
+    elementsCollection.get(event.target.parentElement).edit();
+  } else if (event.target.dataset.func === 'remove'){
+    elementsCollection.get(event.target.parentElement).remove();
   }
-}
+})
 
-function compositionLoad() {
-  //firstElement move to the center of screen
-  const centerCoord = getCenterCoordDrawArea(drawArea);
-  changeCoordInElementsCollection(moveElement(firstElement, elements, centerCoord, drawArea), elements);
-  updateTextList(textList, elements);
-  updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
-  //sizing bacground canvas = drawArea 
-  resizeCanvas(canvasBG, drawArea);
-}
-
-function compositionResize() {
-  resizeCanvas(canvasBG, drawArea);
-  resizeWindow(elements, w, h, correctPosition, changeCoordInElementsCollection);
-  updateCoordinatesList();
-  drawLineOnCanvasBG(ctxBG, canvasBG, linesCoordinates);
-}
-
-function compositionRemove(event) {
-  if (event.target.dataset.func === 'remove') {
-    removeElement(event.target.parentNode, elements, trashCollection, trash, trashHead);
-    updateCoordinatesList();
-    drawLineOnCanvasBG(ctxBG, canvasBG, linesCoordinates);
-    updateTextList(textList, elements);
-    updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
+class Element {
+  constructor(parent, coordX, coordY, destination, collection){
+    this.element = null;
+    this.value = 'new';
+    this.parent = parent;
+    this.children = [];
+    this.clientX = coordX;
+    this.clientY = coordY;
+    this.destination = destination;
+    this.collection = collection;
+    this.moveLimits = {
+      // top: this.destination.offsetTop,
+      // bottom: this.destination.offsetTop + this.destination.clientHeight,
+      // left: this.destination.offsetLeft,
+      // right: this.destination.offsetLeft + this.destination.clientWidth,
+      top: 0,
+      bottom: this.destination.clientHeight,
+      left: 0,
+      right: this.destination.clientWidth,
+    };
+    this.htmlStructure = `<div class="element__text" data-func="element">${this.value}</div>`
+                        +'<input class="element__input hide" type="text"></input>'
+                        +'<div class="element__btn element__btn-remove" data-func="remove" title="remove">&#10008;</div>'
+                        +'<div class="element__btn element__btn-create" data-func="create" title="create">+</div>'
+                        +'<div class="element__btn element__btn-edit" data-func="edit" title="edit">&#9998;</div>'
+                        +'<div class="element__btn element__btn-info" data-func="info" title="info">i</div>';
   }
-}
-
-
-function compositionMoveElement(event) {
-  function move(element, drawArea, collection) {
-    return function(event){
-      element.style.left = event.clientX - element.clientWidth + 'px';
-      element.style.top = event.clientY - element.clientHeight / 2 +'px';
-      correctPosition(element, drawArea);
-      changeCoordInElementsCollection(element, collection);
-    }
+  create() {
+    const newElement = document.createElement('div');
+    newElement.classList.add('element');
+    newElement.dataset.func = 'element';
+    newElement.insertAdjacentHTML('beforeend', this.htmlStructure);
+    this.element = newElement;
+    //add to collection
+    this.collection.set(this.element, this);
+    //append to
+    this.destination.append(this.element);
+    this.addChildrenPropForParent(this.collection, this.parent)
+    this.move(this);
+    return this; 
   }
-  
-  if (event.target.dataset.func === 'element') {
-    // debugger;
-    const newElement = createElement(event.target);
-    appendElement(newElement, drawArea);
-    addElemToElementsCollection(newElement, elements);
 
-    const moveAt = move(newElement, drawArea, elements);
-    moveAt(event);
-    
-    updateTextList(textList, elements);
-    addParentToElemFromElementsCollection(newElement, event.target, elements);
-    addChildrenToParentElem(event.target, newElement, elements);
-        
-    
-    //moving
-    document.addEventListener('mousemove', moveAt);
-    document.addEventListener('mousemove', updateCoordinatesList);
-    document.addEventListener('mousemove', drawLine);
-    
-    document.onmouseup = () => {
-      updateTextList(textList, elements);
-      updateOutputList(getOutputStructure(elements, [firstElement]), outputList);
-      document.removeEventListener('mousemove', moveAt);
-      document.removeEventListener('mousemove', updateCoordinatesList);
-      document.removeEventListener('mousemove', drawLine);
-      document.onmouseup = null;
-    }
-  } else if (event.target.dataset.func === 'move') {
-    //moving
-    const moveAt = move(event.target.parentNode, drawArea, elements);
-
-    document.addEventListener('mousemove', moveAt);
-    document.addEventListener('mousemove', updateCoordinatesList);
-    document.addEventListener('mousemove', drawLine);
-
-    document.onmouseup = () => {
-      document.removeEventListener('mousemove', moveAt);
-      document.removeEventListener('mousemove', updateCoordinatesList);
-      document.removeEventListener('mousemove', drawLine);
-      document.onmouseup = null;
-    }
+  move({clientX, clientY}) {
+    const x = clientX - this.element.clientWidth / 2;
+    const y = clientY - this.element.clientHeight / 2;
+    this.element.style.left = `${Math.max(this.moveLimits.left, Math.min(this.moveLimits.right - this.element.clientWidth, x))}px`;
+    this.element.style.top = `${Math.max(this.moveLimits.top, Math.min(this.moveLimits.bottom - this.element.clientHeight, y))}px`;
+    this.clientX = this.element.offsetLeft + this.element.clientWidth / 2;
+    this.clientY = this.element.offsetTop + this.element.clientHeight / 2;
   }
-}
 
-/////////////////////////////////
-//Simple function for listeners//
-////////////////////////////////
-function drawLine() {
-  drawLineOnCanvasBG(ctxBG, canvasBG, linesCoordinates);
-  return true
-}
-//update coodrdinates list
-function updateCoordinatesList() {
-  linesCoordinates = pullPairCoordinates(elements);
-  return true;
-}
+  addChildrenPropForParent(collection, parent){
+    if (this.parent) collection.get(parent).children.push(this.element);
+  }
+  edit(){
+    const input = this.element.querySelector('.element__input');
+    const text = this.element.querySelector('.element__text');
+    const btns = [...this.element.querySelectorAll('.element__btn')];
+    text.classList.add('hide');
+    input.classList.remove('hide');
+    btns.forEach(elem => elem.classList.add('hide'));
+    input.focus();
+    input.addEventListener('change', () => {
+      text.textContent = input.value;
+      input.value = '';
+      text.classList.remove('hide');
+      input.classList.add('hide');
+      setTimeout(() => btns.forEach(elem => elem.classList.remove('hide')), 1000);
+    }, {once: true})
+  }
 
-//
-function openTrashFunc() {
-  openTrash(trashCollection, trash);
-  return true;
+  remove(){
+    if (this.collection.size <= 1) return;
+    this.collection.get(this.parent).children = this.collection.get(this.parent).children
+                                                     .filter(child => child !== this.element);
+    this.children.forEach(child => this.collection.get(child).parent = 'deleted');
+    this.collection.delete(this.element);
+    this.element.remove();
+  }
 }
