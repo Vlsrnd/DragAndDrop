@@ -37,6 +37,7 @@ module.exports = {
     filename: `./js/${filename('js')}`,
     path: path.resolve(__dirname, 'app')
   },
+
   devServer: {
     historyApiFallback: true,
     contentBase: path.resolve(__dirname, 'app'),
@@ -45,7 +46,9 @@ module.exports = {
     hot: true,
     port: 3001,
   },
-  // optimization: optimization(),
+
+  optimization: optimization(),
+
   plugins: [
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'src/index.html'),
@@ -67,7 +70,9 @@ module.exports = {
       ]
     }),
   ],
+
   devtool: isProd ? false : 'source-map',
+  
   module: {
     rules: [
       {
