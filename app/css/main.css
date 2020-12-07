@@ -2,6 +2,11 @@
   --delay-delete: 0.5s;
 }
 
+/* @font-face {
+  font-family: 'ethnocentric';
+  src: url(../fonts/ethnocentric.ttf);
+} */
+
 *,
 *::before,
 *::after {
@@ -20,6 +25,7 @@ html, body {
 body {
   position: relative;
   font-family: monospace;
+  font-family: ethnocentric, monospace;
 }
 .start{
   position: absolute;
@@ -182,3 +188,6 @@ body {
 .hide {
   display: none;
 }
+
+
+/*# sourceMappingURL=main.css.map*/

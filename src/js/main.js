@@ -1,27 +1,34 @@
 'use strict';
 export {drawArea, drawAreaWidth, drawAreaHeight, canvasBG, elementsCollection, trashCollection};
 import {resizeCanvas, repositionElements} from './resize.js';
+import '../css/style.css';
+import '../index.html';
+// import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
       drawAreaWidth = drawArea.clientWidth,
       drawAreaHeight = drawArea.clientHeight,
       canvasBG = document.getElementById('canvas-bg'),
-      startScreen = document.querySelector('.start'),
-      startButton = document.querySelector('.start__btn'),
+      // startScreen = document.querySelector('.start'),
+      // startButton = document.querySelector('.start__btn'),
       elementsCollection = new Map(),
       trashCollection = new Map();
+
+
 window.addEventListener('load', () => {
-  resizeCanvas();
+  resizeCanvas(canvasBG, drawArea);
   const elem = new Element(null, 0, 0, drawArea, elementsCollection).create();
   elem.move({clientX: drawArea.clientWidth / 2, 
              clientY: elem.element.clientHeight / 2});
-  // debugger;
 })
+
+const resizeCanvasForListener = () => resizeCanvas(canvasBG, drawArea);
+
 window.addEventListener('resize', () => {
-  resizeCanvas();
-  repositionElements();
+  resizeCanvasForListener();
 })
-//for desktop
+
+
 document.addEventListener('mousedown', event => {
   if (event.target.dataset.func === 'create'){
     const element = new Element(event.target.parentElement, event.clientX, event.clientY, drawArea, elementsCollection).create();

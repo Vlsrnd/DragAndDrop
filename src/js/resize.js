@@ -1,9 +1,9 @@
 import {drawArea, drawAreaWidth, drawAreaHeight, canvasBG, elementsCollection} from './main.js';
 export {resizeCanvas, repositionElements};
 
-function resizeCanvas() {
-  canvasBG.setAttribute('width', drawArea.clientWidth);
-  canvasBG.setAttribute('height', drawArea.clientHeight);
+function resizeCanvas(canvas, parentElement) {
+  canvas.setAttribute('width', parentElement.clientWidth);
+  canvas.setAttribute('height', parentElement.clientHeight);
 }
 
 function repositionElements() {
