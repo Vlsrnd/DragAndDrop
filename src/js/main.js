@@ -1,19 +1,16 @@
 'use strict';
-export {drawArea, drawAreaWidth, drawAreaHeight, canvasBG, elementsCollection, trashCollection};
 import {resizeCanvas, repositionElements} from './resize.js';
 import '../css/style.css';
 import '../index.html';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
-      drawAreaWidth = drawArea.clientWidth,
-      drawAreaHeight = drawArea.clientHeight,
       canvasBG = document.getElementById('canvas-bg'),
+      currentDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
       // startScreen = document.querySelector('.start'),
       // startButton = document.querySelector('.start__btn'),
       elementsCollection = new Map(),
       trashCollection = new Map();
-
 
 window.addEventListener('load', () => {
   resizeCanvas(canvasBG, drawArea);
@@ -26,6 +23,9 @@ const resizeCanvasForListener = () => resizeCanvas(canvasBG, drawArea);
 
 window.addEventListener('resize', () => {
   resizeCanvasForListener();
+  repositionElements(elementsCollection, currentDrawAreaSize, drawArea);
+  currentDrawAreaSize.width = drawArea.clientWidth;
+  currentDrawAreaSize.height = drawArea.clientHeight;
 })
 
 
@@ -94,7 +94,7 @@ class Element {
     return this; 
   }
 
-  move({clientX, clientY}) {
+  move({clientX, clientY} = this) {
     const x = clientX - this.destination.offsetLeft - this.element.clientWidth / 2;
     const y = clientY - this.destination.offsetTop - this.element.clientHeight / 2;
     this.element.style.left = `${Math.max(this.moveLimits.left, Math.min(this.moveLimits.right - this.element.clientWidth, x))}px`;
