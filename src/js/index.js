@@ -12,9 +12,9 @@ import { removeElement } from './remove-element.js';
 
 const drawArea = document.querySelector('.draw-area'),
       canvasBG = document.getElementById('canvas-bg'),
-      lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight};
-let elementsCollection = [],
-    trashCollection;
+      lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
+      elementsCollection = [],
+      trashCollection = [];
 
 //temporary
 window.elementsCollection = elementsCollection;
@@ -56,14 +56,6 @@ document.addEventListener('mousedown', event => {
     })
   }
 })
-//edit, remove
-document.addEventListener('click', event => {
-  if (event.target.dataset.func === 'edit'){
-    editText(event.target.parentElement);
-  } else if (event.target.dataset.func === 'remove'){
-    trashCollection = removeElement(event.target.parentElement, elementsCollection);
-  }
-})
 //resize
 +function () {
   window.addEventListener('resize', resizeThrottler, false);
@@ -80,15 +72,26 @@ document.addEventListener('click', event => {
     }
   }
 }();
+//edit, remove
+document.addEventListener('click', event => {
+  if (event.target.dataset.func === 'edit'){
+    editText(event.target.parentElement);
+  } else if (event.target.dataset.func === 'remove'){
+    const trash = removeElement(event.target.parentElement, elementsCollection);
+    trashCollection.push(trash);
+    console.log(trashCollection[trashCollection.length - 1]);
+  }
+})
+
 //ctrl+z
 document.addEventListener('keydown', event => {
   if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey)) {
-    if (trashCollection){
-      trashCollection.forEach(element => {
+    if (trashCollection.length > 0){
+      const lastTrash = trashCollection.pop();
+      lastTrash.deletedElements.forEach(element => {
         element.classList.remove('hide');
-        element.dataset.delete = 'false'
-      });
-      trashCollection = null;
+        element.dataset.deleted = 'false';
+      })
     } else {
       alert('trash basket is empty')
     }
