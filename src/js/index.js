@@ -6,6 +6,7 @@ import { createElement } from './create-element.js';
 import { htmlStructure } from './element-structure.js';
 import { addToCollection } from './add-to-collection.js';
 import { moveElement } from './move-element.js';
+import { editText } from './edit-text.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
@@ -52,6 +53,14 @@ document.addEventListener('mousedown', event => {
   }
 })
 
+document.addEventListener('click', event => {
+  if (event.target.dataset.func === 'edit'){
+    editText (event.target.parentElement);
+  } else if (event.target.dataset.func === 'remove'){
+    // elementsCollection.get(event.target.parentElement).remove();
+  }
+})
+
 +function () {
   window.addEventListener('resize', resizeThrottler, false);
   let resizeTimeout;
@@ -78,23 +87,6 @@ document.addEventListener('mousedown', event => {
 //   }
 // })
 
-
-//   edit(){
-//     const input = this.element.querySelector('.element__input');
-//     const text = this.element.querySelector('.element__text');
-//     const btns = [...this.element.querySelectorAll('.element__btn')];
-//     text.classList.add('hide');
-//     input.classList.remove('hide');
-//     btns.forEach(elem => elem.classList.add('hide'));
-//     input.focus();
-//     input.addEventListener('change', () => {
-//       text.textContent = input.value;
-//       input.value = '';
-//       text.classList.remove('hide');
-//       input.classList.add('hide');
-//       setTimeout(() => btns.forEach(elem => elem.classList.remove('hide')), 1000);
-//     }, {once: true})
-//   }
 
 //   remove(){
 //     if (this.collection.size <= 1) return;
