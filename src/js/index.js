@@ -18,6 +18,7 @@ let elementsCollection = [],
 
 //temporary
 window.elementsCollection = elementsCollection;
+window.trashCollection = trashCollection;
 //
 window.addEventListener('load', () => {
   resizeCanvas(canvasBG, drawArea);
@@ -28,7 +29,7 @@ window.addEventListener('load', () => {
               {clientX: drawArea.clientWidth / 2, clientY: 10},
               drawArea);
 })
-
+//create, move
 document.addEventListener('mousedown', event => {
   if (event.target.dataset.func === 'create'){
     const parent = event.target.parentElement;
@@ -55,7 +56,7 @@ document.addEventListener('mousedown', event => {
     })
   }
 })
-
+//edit, remove
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'edit'){
     editText(event.target.parentElement);
@@ -63,7 +64,7 @@ document.addEventListener('click', event => {
     trashCollection = removeElement(event.target.parentElement, elementsCollection);
   }
 })
-
+//resize
 +function () {
   window.addEventListener('resize', resizeThrottler, false);
   let resizeTimeout;
@@ -79,3 +80,17 @@ document.addEventListener('click', event => {
     }
   }
 }();
+//ctrl+z
+document.addEventListener('keydown', event => {
+  if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey)) {
+    if (trashCollection){
+      trashCollection.forEach(element => {
+        element.classList.remove('hide');
+        element.dataset.delete = 'false'
+      });
+      trashCollection = null;
+    } else {
+      alert('trash basket is empty')
+    }
+  }
+});
