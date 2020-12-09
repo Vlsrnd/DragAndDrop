@@ -7,12 +7,15 @@ import { htmlStructure } from './element-structure.js';
 import { addToCollection } from './add-to-collection.js';
 import { moveElement } from './move-element.js';
 import { editText } from './edit-text.js';
+import { removeElement } from './remove-element.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
       canvasBG = document.getElementById('canvas-bg'),
-      lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
-      elementsCollection = [];
+      lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight};
+let elementsCollection = [],
+    trashCollection;
+
 //temporary
 window.elementsCollection = elementsCollection;
 //
@@ -55,9 +58,9 @@ document.addEventListener('mousedown', event => {
 
 document.addEventListener('click', event => {
   if (event.target.dataset.func === 'edit'){
-    editText (event.target.parentElement);
+    editText(event.target.parentElement);
   } else if (event.target.dataset.func === 'remove'){
-    // elementsCollection.get(event.target.parentElement).remove();
+    trashCollection = removeElement(event.target.parentElement, elementsCollection);
   }
 })
 
@@ -76,26 +79,3 @@ document.addEventListener('click', event => {
     }
   }
 }();
-
-
-
-// document.addEventListener('click', event => {
-//   if (event.target.dataset.func === 'edit'){
-//     elementsCollection.get(event.target.parentElement).edit();
-//   } else if (event.target.dataset.func === 'remove'){
-//     elementsCollection.get(event.target.parentElement).remove();
-//   }
-// })
-
-
-//   remove(){
-//     if (this.collection.size <= 1) return;
-//     this.collection.get(this.parent).children = this.collection.get(this.parent).children
-//                                                      .filter(child => child !== this.element);
-//     this.children.forEach(child => this.collection.get(child).parent = 'deleted');
-//     this.collection.delete(this.element);
-//     this.element.remove();
-//   }
-// }
-
-
