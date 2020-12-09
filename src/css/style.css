@@ -81,6 +81,7 @@ body {
   margin: 0;
   margin-right: 10px;
   position: relative;
+  border: 1px solid black;
 }
 .text-area {
   width: 30%;

@@ -5,12 +5,12 @@ function resizeCanvas(canvas, parentElement) {
   canvas.setAttribute('height', parentElement.clientHeight);
 }
 
-
-//collection === elementsCollection, parentElement === drawArea
-function repositionElements(collection, previousSize, parentElement) {
-  [...collection.keys()].forEach(element => {
-    collection.get(element).clientX *= parentElement.clientWidth / previousSize.width;
-    collection.get(element).clientY *= parentElement.clientHeight / previousSize.height;
-    collection.get(element).move();
+function repositionElements(collection, lastSize, parentElement) {
+  collection.forEach(obj => {
+    const element = obj.element;
+    element.style.left = element.offsetLeft * (parentElement.clientWidth / lastSize.width) + 'px';
+    element.style.top =  element.offsetTop * (parentElement.clientHeight / lastSize.height) + 'px';
   })
+  lastSize.width = parentElement.clientWidth;
+  lastSize.height = parentElement.clientHeight;
 }
