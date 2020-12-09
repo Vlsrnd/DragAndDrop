@@ -6,12 +6,12 @@ const removeElement = (element, collection) => {
   const trash = [];
   children.forEach(element => {
     if (element.dataset.deleted === 'false') {
-      element.dataset.deleted = 'true';
+      element.dataset.deleted = true;
       element.classList.add('hide')
       trash.push(element);
     }
   });
-  element.dataset.deleted = 'true';
+  element.dataset.deleted = true;
   element.classList.add('hide');
   trash.push(element);
   return {time: new Date(), deletedElements: trash};
