@@ -83,7 +83,7 @@ document.addEventListener('click', event => {
   }
 })
 
-//ctrl+z
+//restore ctrl+z
 document.addEventListener('keydown', event => {
   if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey)) {
     if (trashCollection.length > 0){
