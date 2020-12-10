@@ -76,21 +76,14 @@ body {
 }
 /* draw-area style start */
 .draw-area {
-  width: 70%;
+  width: 100%;
   overflow: hidden;
   margin: 0;
-  margin-right: 10px;
   position: relative;
   border: 1px solid black;
 }
-.text-area {
-  width: 30%;
-  text-align: center;
-}
-
 .canvas {
-  background-color: #777;
-  opacity: .5;
+  background-color: #fff;
   padding: 0;
   margin: 0;
 }
@@ -126,10 +119,16 @@ body {
 
 .element__text {
   padding: 10px 20px;
-  border: 1px solid black;
   border-radius: 9999px;
   background-color: #fff;
+  border: 1px dashed black;
   z-index: 2;
+  transition: all .2s linear;
+}
+.element__text:hover {
+  box-shadow: 0 4px 4px 1px #000;
+  transform: scale(1.05);
+  font-weight: 700;
 }
 
 .element__btn {
@@ -148,24 +147,24 @@ body {
 }
 
 .element__btn-remove {
-  background-color: hsl(0, 100%, 30%);
+  background-color: hsl(0, 60%, 50%);
   bottom: -50%;
   right: -50%;
 }
 .element__btn-create {
-  background-color: green;
+  background-color: hsl(90, 60%, 50%);
   cursor: copy;
   top: -50%;
   left: -50%;
 }
 .element__btn-edit {
-  background-color: orangered;
+  background-color: hsl(270, 60%, 50%);
   cursor: text;
   top: -50%;
   right: -50%;
 }
 .element__btn-info {
-  background-color: blue;
+  background-color: hsl(180, 60%, 50%);
   cursor: help;
   bottom: -50%;
   left: -50%;

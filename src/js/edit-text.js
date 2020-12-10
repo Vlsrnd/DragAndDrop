@@ -14,7 +14,6 @@ const editText = (element) => {
     text.classList.remove('hide');
     input.classList.add('hide');
     setTimeout(() => btns.forEach(elem => elem.classList.remove('hide')), 1000);
+
   }, {once: true})
-};
-
-
+}
