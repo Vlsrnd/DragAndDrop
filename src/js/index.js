@@ -92,7 +92,7 @@ document.addEventListener('click', event => {
   } else if (event.target.dataset.func === 'remove'){
     const trash = removeElement(event.target.parentElement, elementsCollection);
     trashCollection.push(trash);
-    console.log(trashCollection[trashCollection.length - 1]);
+    redrawAreaComposition();
   }
 })
 
@@ -105,6 +105,7 @@ document.addEventListener('keydown', event => {
         element.classList.remove('hide');
         element.dataset.deleted = 'false';
       })
+      redrawAreaComposition();
     } else {
       alert('trash basket is empty')
     }
