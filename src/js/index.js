@@ -31,6 +31,7 @@ const redrawAreaComposition = () => {
   drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate);
 };
 
+
 window.addEventListener('load', () => {
   resizeCanvas(canvasBG, drawArea);
   const element = createElement(htmlStructure);
@@ -65,6 +66,7 @@ document.addEventListener('mousedown', event => {
     document.addEventListener('mousemove', moveCurrentElement);
     document.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', moveCurrentElement);
+
     })
   }
 })
