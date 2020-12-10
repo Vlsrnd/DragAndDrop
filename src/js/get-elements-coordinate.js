@@ -1,7 +1,7 @@
 export {getElementsCoordinate};
 
 const getElementsCoordinate = (collection) => {
-  if (collection.length < 2) return;
+  if (collection.length < 2) return [];
   const coordinates = [];
   collection.forEach(obj => {
     const firstPoint = [obj.element.offsetLeft + obj.element.clientWidth / 2,
