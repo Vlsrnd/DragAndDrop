@@ -1,15 +1,15 @@
 export {drawModeFunction};
 
 const drawModeFunction = (canvas, context, coordinates) => {
-  // debugger
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.lineWidth = 3;
-  context.beginPath();
-  context.moveTo(coordinates[0][0], coordinates[0][1]);
-  for (let i = 1; i < coordinates.length; i++) {
+  for (let i = 0; i < coordinates.length; i++) {
+    if (coordinates[i] === 'start') context.beginPath();
+    if (coordinates[i - 1] === 'start') {
+      context.moveTo(coordinates[i][0], coordinates[i][1]);
+    }
     context.lineTo(coordinates[i][0], coordinates[i][1]);
+    context.stroke();
   }
-  // context.closePath();
-  context.stroke();
   return true;
 };

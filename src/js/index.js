@@ -125,13 +125,20 @@ document.addEventListener('keydown', event => {
   }
 });
 
+
 const drawModeComposition = event => {
   drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
                           event.clientY - drawArea.offsetTop]);
   drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
 };
-const drawModeOn = () => drawArea.addEventListener('mousemove', drawModeComposition);
-const drawModeOff = () => drawArea.removeEventListener('mousemove', drawModeComposition);
+const drawModeOn = () => {
+  drawModeCoordinate.push('start');
+  drawArea.addEventListener('mousemove', drawModeComposition);
+};
+const drawModeOff = () => {
+  drawModeCoordinate.push('stop');
+  drawArea.removeEventListener('mousemove', drawModeComposition);
+};
 
 instruments.addEventListener('click', event => {
   if (event.target.dataset.btn === 'draw-mode') {
