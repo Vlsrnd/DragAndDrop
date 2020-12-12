@@ -123,11 +123,16 @@ body {
   background-color: #fff;
   padding: 0;
   margin: 0;
+  position: absolute;
 }
 #canvas-bg {
-  position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
+}
+#canvas-draw {
+  z-index: 2;
+  background-color: transparent;
 }
 
 .element {
@@ -146,12 +151,13 @@ body {
   font-family: monospace;
   user-select: none;
   cursor: move;
+  z-index: 5;
 }
 .element-smooth-move {
   transition: all var(--delay-delete) linear;
 }
 .element:hover {
-  z-index: 9999;
+  z-index: 10;
 }
 
 .element__text {

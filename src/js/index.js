@@ -10,21 +10,30 @@ import { editText } from './edit-text.js';
 import { removeElement } from './remove-element.js';
 import { getElementsCoordinate } from './get-elements-coordinate.js';
 import { drawLinesOnCanvas } from './draw-lines-on-canvas.js';
+import { drawModeFunction } from './draw-mode-function.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
       canvasBG = document.getElementById('canvas-bg'),
       ctxBG = canvasBG.getContext('2d'),
+      canvasDraw = document.getElementById('canvas-draw'),
+      ctxDraw = canvasDraw.getContext('2d'),
+      instruments = document.querySelector('.instruments'),
       lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
       elementsCollection = [],
       trashCollection = [],
-      elementsCoordinate = [];
+      elementsCoordinate = [],
+      drawModeCoordinate = [];
+let drawMode = false;
+
 
 //temporary
 window.elementsCollection = elementsCollection;
 window.trashCollection = trashCollection;
 window.elementsCoordinate = elementsCoordinate;
+window.drawModeCoordinate = drawModeCoordinate;
 //
+
 const redrawAreaComposition = () => {
   elementsCoordinate.length = 0;
   elementsCoordinate.push(...getElementsCoordinate(elementsCollection));
@@ -34,6 +43,7 @@ const redrawAreaComposition = () => {
 
 window.addEventListener('load', () => {
   resizeCanvas(canvasBG, drawArea);
+  resizeCanvas(canvasDraw, drawArea);
   const element = createElement(htmlStructure);
   drawArea.append(element);
   addToCollection(element, elementsCollection)
@@ -80,6 +90,7 @@ document.addEventListener('mousedown', event => {
         resizeTimeout = null;
         // resize handler start
         resizeCanvas(canvasBG, drawArea);
+        resizeCanvas(canvasDraw, drawArea);
         repositionElements(elementsCollection, lastDrawAreaSize, drawArea);
         redrawAreaComposition();
         // end
@@ -113,3 +124,25 @@ document.addEventListener('keydown', event => {
     }
   }
 });
+
+const drawModeComposition = event => {
+  drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
+                          event.clientY - drawArea.offsetTop]);
+  drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
+};
+const drawModeOn = () => drawArea.addEventListener('mousemove', drawModeComposition);
+const drawModeOff = () => drawArea.removeEventListener('mousemove', drawModeComposition);
+
+instruments.addEventListener('click', event => {
+  if (event.target.dataset.btn === 'draw-mode') {
+    if (!drawMode) {
+      drawMode = true;
+      drawArea.addEventListener('mousedown', drawModeOn);
+      drawArea.addEventListener('mouseup', drawModeOff);
+    } else if (drawMode) {
+      drawMode = false;
+      drawArea.removeEventListener('mousedown', drawModeOn);
+      drawArea.removeEventListener('mouseup', drawModeOff);
+    }
+  }
+})
