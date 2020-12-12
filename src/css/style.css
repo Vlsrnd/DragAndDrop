@@ -1,5 +1,6 @@
 :root {
   --delay-delete: 0.5s;
+  --instrument-side-color: #777;
 }
 
 /* @font-face {
@@ -11,15 +12,13 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 button,
 button:active,
 button:focus {
   outline: none;
-}
-html, body {
-  padding: 0;
-  margin: 0;
 }
 
 body {
@@ -36,7 +35,6 @@ body {
   justify-content: center;
   align-items: center;
 }
-
 .start__btn{
   font-family: monospace;
   color: #faebd7;
@@ -49,6 +47,45 @@ body {
 }
 .start__btn:hover{
   font-weight: 700;
+}
+
+.instruments {
+  position: absolute;
+  z-index: 500;
+  width: 100px;
+  min-height: 100vh;
+  border: 1px solid black;
+  background-color: var(--instrument-side-color);
+  left: -100px;
+  transition: left .2s linear;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.instruments::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 200px;
+  background-color: var(--instrument-side-color);;
+  border-radius: 0 20px 20px 0;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.instruments:hover {
+  left: 0;
+}
+.instruments__item {
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 1px solid black;
+  cursor: pointer;
 }
 
 
