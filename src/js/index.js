@@ -127,22 +127,22 @@ document.addEventListener('keydown', event => {
 
 //drawMode start
 
-const drawModeComposition = event => {
+const addDrawModeCoordinate = event => {
   drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
                           event.clientY - drawArea.offsetTop]);
+  // redraw();
 };
 const redraw = () => {
   drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
-  setTimeout(redraw, 50);  
+  setTimeout(redraw, 60);  
 }
 
 const drawModeOn = () => {
   drawModeCoordinate.push('start');
-  drawArea.addEventListener('mousemove', drawModeComposition);
+  drawArea.addEventListener('mousemove', addDrawModeCoordinate);
 };
 const drawModeOff = () => {
-  drawModeCoordinate.push('stop');
-  drawArea.removeEventListener('mousemove', drawModeComposition);
+  drawArea.removeEventListener('mousemove', addDrawModeCoordinate);
 };
 
 window.requestAnimationFrame(redraw);
