@@ -60,6 +60,7 @@ window.addEventListener('load', () => {
 })
 //create, move
 document.addEventListener('mousedown', event => {
+  if (drawMode) return;
   if (event.target.dataset.func === 'create'){
     const parent = event.target.parentElement;
     const element = createElement(htmlStructure);
@@ -107,6 +108,7 @@ document.addEventListener('mousedown', event => {
 }();
 //edit, remove
 document.addEventListener('click', event => {
+  if (drawMode) return;
   if (event.target.dataset.func === 'edit'){
     editText(event.target.parentElement);
   } else if (event.target.dataset.func === 'remove'){
@@ -118,7 +120,7 @@ document.addEventListener('click', event => {
 
 //restore ctrl+z
 document.addEventListener('keydown', event => {
-  if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey)) {
+  if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey) && !drawMode) {
     if (trashCollection.length > 0){
       const lastTrash = trashCollection.pop();
       lastTrash.deletedElements.forEach(element => {
