@@ -166,6 +166,7 @@ const addDrawModeCoordinate = event => {
   requestAnimationFrame(redraw);
 };
 const redraw = () => {
+  console.log('draw')
   drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
 }
 const drawModeOn = () => {

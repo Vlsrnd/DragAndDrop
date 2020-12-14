@@ -214,6 +214,8 @@ body {
 .draw-area__bg {
   width: 100%;
   min-height: 100%;
+  position: absolute;
+  z-index: 0;
 }
 .canvas {
   padding: 0;
