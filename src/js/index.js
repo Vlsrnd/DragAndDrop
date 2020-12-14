@@ -14,6 +14,7 @@ import { drawModeFunction } from './draw-mode-function.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
+      drawAreaBG = document.querySelector('.draw-area__bg'),
       canvasBG = document.getElementById('canvas-bg'),
       ctxBG = canvasBG.getContext('2d'),
       canvasDraw = document.getElementById('canvas-draw'),
@@ -25,6 +26,27 @@ const drawArea = document.querySelector('.draw-area'),
       elementsCollection = [],
       trashCollection = [],
       elementsCoordinate = [],
+      mainSettings = {
+        color: 'red',
+        lineWidth: 10,
+        _colorBG: '#FFF',
+        set colorBG(value) { 
+          this._colorBG = value;
+          console.log(this.colorBG);
+          drawAreaBG.style.backgroundColor = this._colorBG;
+        },
+        get colorBG() { return this._colorBG },
+        redraw: () => drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings),
+        changeProp(obj) {
+          if (!this[obj.prop]) {
+            console.log('Wrong input. Need {prop: propName, value: value}');
+            return false;
+          }
+          this[obj.prop] = obj.value
+          this.redraw();
+          return true;
+        },
+      },
       drawModeCoordinate = [],
       drawModeSettings = {
         color: '#000',
@@ -34,17 +56,19 @@ let drawMode = false;
 
 
 //temporary
+window.drawAreaBG = drawAreaBG;
 window.elementsCollection = elementsCollection;
 window.trashCollection = trashCollection;
 window.elementsCoordinate = elementsCoordinate;
 window.drawModeCoordinate = drawModeCoordinate;
 window.drawModeSettings = drawModeSettings;
+window.mainSettings = mainSettings;
 //
 
 const redrawAreaComposition = () => {
   elementsCoordinate.length = 0;
   elementsCoordinate.push(...getElementsCoordinate(elementsCollection));
-  drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate);
+  drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings);
 };
 
 

@@ -211,8 +211,11 @@ body {
   position: relative;
   border: 1px solid black;
 }
+.draw-area__bg {
+  width: 100%;
+  min-height: 100%;
+}
 .canvas {
-  background-color: #fff;
   padding: 0;
   margin: 0;
   position: absolute;

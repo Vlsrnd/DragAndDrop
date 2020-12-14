@@ -1,8 +1,9 @@
 export {drawLinesOnCanvas};
 
-const drawLinesOnCanvas = (canvas, context, coordinates) => {
+const drawLinesOnCanvas = (canvas, context, coordinates, settings) => {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.lineWidth = 3;
+  context.lineWidth = settings.lineWidth;
+  context.strokeStyle = settings.color;
   coordinates.forEach(element => {
     context.beginPath();
     //coordinates parent element
