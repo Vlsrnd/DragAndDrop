@@ -19,6 +19,7 @@ const drawArea = document.querySelector('.draw-area'),
       canvasDraw = document.getElementById('canvas-draw'),
       ctxDraw = canvasDraw.getContext('2d'),
       instruments = document.querySelector('.instruments'),
+      drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
       lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
       elementsCollection = [],
       trashCollection = [],
@@ -156,10 +157,12 @@ instruments.addEventListener('click', event => {
   if (event.target.dataset.btn === 'draw-mode') {
     if (!drawMode) {
       drawMode = true;
+      drawModeSettingsElement.style.top = '0px';
       drawArea.addEventListener('mousedown', drawModeOn);
       drawArea.addEventListener('mouseup', drawModeOff);
     } else if (drawMode) {
       drawMode = false;
+      drawModeSettingsElement.style.top = '-40px';
       drawArea.removeEventListener('mousedown', drawModeOn);
       drawArea.removeEventListener('mouseup', drawModeOff);
     }

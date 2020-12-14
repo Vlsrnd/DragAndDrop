@@ -106,6 +106,98 @@ body {
   height: 40px;
   text-align: center;
 }
+
+.draw-mode__settings {
+  width: 100%;
+  height: 40px;
+  background-color: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: all .15s linear;
+  position: absolute;
+  top: -40px;
+}
+.colors {
+  display: flex;
+}
+.colors__color {
+  width: 35px;
+  height: 35px;
+  border-radius: 12px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+.colors__color[data-color=red] {background-color: red;}
+.colors__color[data-color=green] {background-color: green;}
+.colors__color[data-color=blue] {background-color: blue;}
+.colors__color:hover {transform: scale(1.2);}
+.colors input {
+  width: 90px;
+  border: none;
+  border-radius: 12px;
+  padding: 5px;
+  font-size: 16px;
+  font-family: monospace;
+  text-align: center;
+}
+.line-width {
+  display: flex;
+  align-items: center;
+}
+.line-width__line {
+  width: 100px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 9999px;
+  position: relative;
+  margin-right: 20px;
+}
+.line-width__line .marker {
+  width: 10px;
+  height: 30px;
+  border: 1px solid black;
+  background-color: olive;
+  border-radius: 9999px;
+  position: absolute;
+  left: 0;
+  top: -10px;
+  cursor: pointer;
+}
+.line-width__number {
+  width: 50px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 35px;
+  font-size: 16px;
+  font-family: monospace;
+}
+.draw-mode__settings .example {
+  width: 150px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 12px;
+}
+.example__line {
+  width: 150px;
+  border-top: 1px solid black;
+  position: absolute;
+  top: 50%;
+}
+.draw-mode__settings .exit {
+  width: 35px;
+  height: 35px;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
 .structure {
   height: 100%;
   flex: 1 1 auto;
