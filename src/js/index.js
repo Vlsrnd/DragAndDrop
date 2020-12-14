@@ -23,7 +23,11 @@ const drawArea = document.querySelector('.draw-area'),
       elementsCollection = [],
       trashCollection = [],
       elementsCoordinate = [],
-      drawModeCoordinate = [];
+      drawModeCoordinate = [],
+      drawModeSettings = {
+        color: '#000',
+        lineWidth: 3,
+      };
 let drawMode = false;
 
 
@@ -32,6 +36,7 @@ window.elementsCollection = elementsCollection;
 window.trashCollection = trashCollection;
 window.elementsCoordinate = elementsCoordinate;
 window.drawModeCoordinate = drawModeCoordinate;
+window.drawModeSettings = drawModeSettings;
 //
 
 const redrawAreaComposition = () => {
@@ -130,15 +135,15 @@ document.addEventListener('keydown', event => {
 const addDrawModeCoordinate = event => {
   drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
                           event.clientY - drawArea.offsetTop]);
-  // redraw();
+  requestAnimationFrame(redraw);
 };
 const redraw = () => {
   drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
-  setTimeout(redraw, 60);  
+  // requestAnimationFrame(redraw);
 }
 
 const drawModeOn = () => {
-  drawModeCoordinate.push('start');
+  drawModeCoordinate.push(drawModeSettings);
   drawArea.addEventListener('mousemove', addDrawModeCoordinate);
 };
 const drawModeOff = () => {
