@@ -20,6 +20,7 @@ const drawArea = document.querySelector('.draw-area'),
       ctxDraw = canvasDraw.getContext('2d'),
       instruments = document.querySelector('.instruments'),
       drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
+      exampleLine = document.getElementById('example-line'),
       lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
       elementsCollection = [],
       trashCollection = [],
@@ -27,7 +28,7 @@ const drawArea = document.querySelector('.draw-area'),
       drawModeCoordinate = [],
       drawModeSettings = {
         color: '#000',
-        lineWidth: 3,
+        lineWidth: 1,
       };
 let drawMode = false;
 
@@ -140,9 +141,7 @@ const addDrawModeCoordinate = event => {
 };
 const redraw = () => {
   drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
-  // requestAnimationFrame(redraw);
 }
-
 const drawModeOn = () => {
   drawModeCoordinate.push(drawModeSettings);
   drawArea.addEventListener('mousemove', addDrawModeCoordinate);
@@ -169,4 +168,12 @@ instruments.addEventListener('click', event => {
   }
 })
 
+drawModeSettingsElement.addEventListener('click', event => {
+  if (event.target.dataset.color) {
+    const color = event.target.dataset.color;
+    drawModeSettings.color = color;
+    exampleLine.style.borderColor = color;
+  }
+
+})
 //drawMode end
