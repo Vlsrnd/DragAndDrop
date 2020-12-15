@@ -11,6 +11,8 @@ import { removeElement } from './remove-element.js';
 import { getElementsCoordinate } from './get-elements-coordinate.js';
 import { drawLinesOnCanvas } from './draw-lines-on-canvas.js';
 import { drawModeFunction } from './draw-mode-function.js';
+import { createGradient } from './create-gradient.js';
+import { selectColor } from './select-color.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
@@ -19,6 +21,10 @@ const drawArea = document.querySelector('.draw-area'),
       ctxBG = canvasBG.getContext('2d'),
       canvasDraw = document.getElementById('canvas-draw'),
       ctxDraw = canvasDraw.getContext('2d'),
+      colorsPalette = document.getElementById('canvas-palette'),
+      colorsPaletteCTX = colorsPalette.getContext('2d'),
+      colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
+      colorsExample = document.querySelector('.colors__example'),
       instruments = document.querySelector('.instruments'),
       drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
       exampleLine = document.getElementById('example-line'),
@@ -81,6 +87,23 @@ window.addEventListener('load', () => {
   moveElement(element, 
               {clientX: drawArea.clientWidth / 2, clientY: 10},
               drawArea);
+  createGradient(colorsPalette, colorsPaletteCTX);
+})
+
+const selectColorForListener = (event) => {
+  selectColor(event, 
+              colorsPalette, 
+              colorsPaletteCTX, 
+              colorsExample, 
+              drawModeSettings, 
+              colorsPaletteMarker)
+};
+colorsPalette.parentElement.addEventListener('mousedown', event => {
+  selectColorForListener(event);
+  colorsPalette.addEventListener('mousemove', selectColorForListener);
+})
+colorsPalette.parentElement.addEventListener('mouseup', event => {
+  colorsPalette.removeEventListener('mousemove', selectColorForListener);
 })
 //create, move
 document.addEventListener('mousedown', event => {

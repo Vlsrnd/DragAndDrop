@@ -123,28 +123,35 @@ body {
 }
 .colors {
   display: flex;
+  align-items: center;
+  height: 40px;
 }
-.colors__color {
-  width: 35px;
-  height: 35px;
-  border-radius: 12px;
+.colors__palette {
   margin-right: 10px;
-  cursor: pointer;
-  transition: all 0.1s linear;
+  height: 35px;
+  border: 1px solid white;
+  /* cursor: crosshair; */
+  position: relative;
 }
-.colors__color[data-color=red] {background-color: red;}
-.colors__color[data-color=green] {background-color: green;}
-.colors__color[data-color=blue] {background-color: blue;}
-.colors__color:hover {transform: scale(1.2);}
-.colors input {
+.colors__palette-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid #777;
+  z-index: 10;
+}
+.colors__example {
   width: 90px;
-  border: none;
+  height: 35px;
+  border: 1px solid white;
   border-radius: 12px;
-  padding: 5px;
-  font-size: 16px;
-  font-family: monospace;
-  text-align: center;
+  background-color: #000;
 }
+
+
 .line-width {
   display: flex;
   align-items: center;
