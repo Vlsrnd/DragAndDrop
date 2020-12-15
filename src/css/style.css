@@ -1,0 +1,337 @@
+:root {
+  --delay-delete: 0.5s;
+  --instrument-side-color: #777;
+}
+
+/* @font-face {
+  font-family: 'ethnocentric';
+  src: url(../fonts/ethnocentric.ttf);
+} */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+button,
+button:active,
+button:focus {
+  outline: none;
+}
+
+body {
+  position: relative;
+  font-family: monospace;
+  font-family: ethnocentric, monospace;
+}
+.start{
+  position: absolute;
+  width: 100%;
+  min-height: 100vh;
+  background-color: hsla(0, 0%, 50%, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.start__btn{
+  font-family: monospace;
+  color: #faebd7;
+
+  height: 20vh;
+  width: 20vh;
+  border-radius: 10vh;
+  background-color: transparent;
+  cursor: pointer;
+}
+.start__btn:hover{
+  font-weight: 700;
+}
+
+.instruments {
+  position: absolute;
+  z-index: 500;
+  width: 100px;
+  min-height: 100vh;
+  border: 1px solid black;
+  background-color: var(--instrument-side-color);
+  left: -100px;
+  transition: left .2s linear;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.instruments::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 200px;
+  background-color: var(--instrument-side-color);;
+  border-radius: 0 20px 20px 0;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.instruments:hover {
+  left: 0;
+}
+.instruments__item {
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+
+
+
+.container {
+  max-width: 1920px;
+  min-height: 100vh;
+  margin: 0 auto;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.header {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+}
+
+.draw-mode__settings {
+  width: 100%;
+  height: 40px;
+  background-color: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: all .15s linear;
+  position: absolute;
+  top: -40px;
+}
+.colors {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+.colors__palette {
+  margin-right: 10px;
+  height: 35px;
+  border: 1px solid white;
+  /* cursor: crosshair; */
+  position: relative;
+}
+.colors__palette-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid #777;
+  z-index: 10;
+}
+.colors__example {
+  width: 90px;
+  height: 35px;
+  border: 1px solid white;
+  border-radius: 12px;
+  background-color: #000;
+}
+
+
+.line-width {
+  display: flex;
+  align-items: center;
+}
+.line-width__line {
+  width: 100px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 9999px;
+  position: relative;
+  margin-right: 20px;
+}
+.line-width__line .marker {
+  width: 10px;
+  height: 30px;
+  border: 1px solid black;
+  background-color: olive;
+  border-radius: 9999px;
+  position: absolute;
+  left: 0;
+  top: -10px;
+  cursor: pointer;
+}
+.line-width__number {
+  width: 50px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 35px;
+  font-size: 16px;
+  font-family: monospace;
+}
+.draw-mode__settings .example {
+  width: 150px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 12px;
+}
+.example__line {
+  width: 150px;
+  border-top: 1px solid black;
+  position: absolute;
+  top: 50%;
+}
+.draw-mode__settings .exit {
+  width: 35px;
+  height: 35px;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.structure {
+  height: 100%;
+  flex: 1 1 auto;
+  display: flex;
+}
+/* draw-area style start */
+.draw-area {
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  position: relative;
+  border: 1px solid black;
+}
+.draw-area__bg {
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  z-index: 0;
+}
+.canvas {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+}
+#canvas-bg {
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+#canvas-draw {
+  z-index: 2;
+  background-color: transparent;
+}
+
+.element {
+  position: absolute;
+  font-size: 14px;
+  padding: 15px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: transparent;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: monospace;
+  user-select: none;
+  cursor: move;
+  z-index: 5;
+}
+.element-smooth-move {
+  transition: all var(--delay-delete) linear;
+}
+.element:hover {
+  z-index: 10;
+}
+
+.element__text {
+  padding: 10px 20px;
+  border-radius: 9999px;
+  background-color: #fff;
+  border: 1px dashed black;
+  z-index: 2;
+  transition: all .2s linear;
+}
+.element__text:hover {
+  box-shadow: 0 4px 4px 1px #000;
+  transform: scale(1.05);
+  font-weight: 700;
+}
+
+.element__btn {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 30px;
+  color: #000;
+  opacity: 0;
+  cursor: pointer;
+  transition: all .3s linear;
+}
+
+.element:hover .element__btn {
+  opacity: 1;
+}
+
+.element__btn-remove {
+  background-color: hsl(0, 60%, 50%);
+  bottom: -50%;
+  right: -50%;
+}
+.element__btn-create {
+  background-color: hsl(90, 60%, 50%);
+  cursor: copy;
+  top: -50%;
+  left: -50%;
+}
+.element__btn-edit {
+  background-color: hsl(270, 60%, 50%);
+  cursor: text;
+  top: -50%;
+  right: -50%;
+}
+.element__btn-info {
+  background-color: hsl(180, 60%, 50%);
+  cursor: help;
+  bottom: -50%;
+  left: -50%;
+}
+
+
+.element__input {
+  border: none;
+  text-align: center;
+}
+
+.footer {
+  height: 30px;
+  background-color: #303030;
+  text-align: center;
+  color: #faebd7;
+  line-height: 30px;
+}
+
+
+.hide {
+  display: none;
+}

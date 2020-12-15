@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag and drop</title>
+</head>
+<body>
+  <div class="start hide">
+    <button class="start__btn">start</button>
+  </div>
+  <aside class="instruments">
+    <div class="instruments__item draw" data-btn="draw-mode">draw</div>
+    <div class="instruments__item trash">trash</div>
+    <div class="instruments__item settings">settings</div>
+  </aside>
+  <div class="container">
+    <header class="header">
+      <div class="draw-mode__settings">
+        <div class="colors">
+          <div class="colors__palette">
+            <canvas id="canvas-palette"></canvas>
+            <div class="colors__palette-marker"></div>
+          </div>
+          <div class="colors__example"></div>
+        </div>
+        <div class="line-width">
+          <div class="line-width__line">
+            <div class="marker"></div>
+          </div>
+          <input type="number" min="1" max="10" class="line-width__number" value="1">
+        </div>
+        <div class="example">
+          <div class="example__line" id="example-line"></div>
+        </div>
+        <div class="exit"></div>
+      </div>
+    </header>
+
+    <div class="structure">
+      <div class="draw-area">
+        <div class="draw-area__bg"></div>
+        <canvas class="canvas" id="canvas-bg"></canvas>
+        <canvas class="canvas" id="canvas-draw"></canvas>
+      </div>
+    </div>
+    <footer class="footer">footer</footer>
+  </div>
+  </div>
+</body>
+</html>

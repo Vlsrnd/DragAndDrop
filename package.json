@@ -1,0 +1,49 @@
+{
+  "name": "tree-structure-creator",
+  "version": "1.0.0",
+  "description": "Create tree structure ease and fast",
+  "main": "index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack --mode development",
+    "start": "cross-env NODE_ENV=development webpack serve --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vlsrnd/DragAndDrop.git"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "components",
+    "tree",
+    "structure",
+    "scheme"
+  ],
+  "author": "Leonid Velichko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vlsrnd/DragAndDrop/issues"
+  },
+  "homepage": "https://github.com/Vlsrnd/DragAndDrop#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.3.2",
+    "cross-env": "^7.0.3",
+    "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
+    "html-loader": "^1.3.2",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^1.3.2",
+    "node-sass": "^5.0.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "sass-loader": "^10.1.0",
+    "terser-webpack-plugin": "^5.0.3",
+    "webpack": "^5.10.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
