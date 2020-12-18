@@ -13,6 +13,7 @@ import { drawLinesOnCanvas } from './draw-lines-on-canvas.js';
 import { drawModeFunction } from './draw-mode-function.js';
 import { createGradient } from './create-gradient.js';
 import { selectColor } from './select-color.js';
+import { slide } from './slide-line-width.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
@@ -82,6 +83,7 @@ window.addEventListener('load', () => {
   resizeCanvas(canvasBG, drawArea);
   resizeCanvas(canvasDraw, drawArea);
   const element = createElement(htmlStructure);
+  element.ondragstart = () => false;
   drawArea.append(element);
   addToCollection(element, elementsCollection)
   moveElement(element, 
@@ -90,7 +92,9 @@ window.addEventListener('load', () => {
   createGradient(colorsPalette, colorsPaletteCTX);
 })
 
-const selectColorForListener = (event) => {
+//drawMode settings
+//select color
+const selectColorForListener = event => {
   selectColor(event, 
               colorsPalette, 
               colorsPaletteCTX, 
@@ -105,6 +109,21 @@ colorsPalette.parentElement.addEventListener('mousedown', event => {
 colorsPalette.parentElement.addEventListener('mouseup', event => {
   colorsPalette.removeEventListener('mousemove', selectColorForListener);
 })
+//line width slider
+const lineWidthSlider = document.querySelector('.line-width-slider');
+// const marker = lineWidthSlider.querySelector('.marker');
+const slideForListener = (event) => {
+  slide(lineWidthSlider, event, drawModeSettings);
+};
+document.addEventListener('mousedown', event => {
+  if (event.target.parentElement === lineWidthSlider) {
+    document.addEventListener('mousemove', slideForListener);
+  }
+})
+document.addEventListener('mouseup', () => {
+  document.removeEventListener('mousemove', slideForListener);
+})
+
 //create, move
 document.addEventListener('mousedown', event => {
   if (drawMode) return;
@@ -112,6 +131,7 @@ document.addEventListener('mousedown', event => {
     const parent = event.target.parentElement;
     const element = createElement(htmlStructure);
     drawArea.append(element);
+    element.ondragstart = () => false;
     moveElement(element, event, drawArea);
     addToCollection(element, elementsCollection, parent);
     const moveNewElement = (event) => {
@@ -218,12 +238,5 @@ instruments.addEventListener('click', event => {
   }
 })
 
-drawModeSettingsElement.addEventListener('click', event => {
-  if (event.target.dataset.color) {
-    const color = event.target.dataset.color;
-    drawModeSettings.color = color;
-    exampleLine.style.borderColor = color;
-  }
 
-})
 //drawMode end

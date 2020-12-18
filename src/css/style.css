@@ -152,32 +152,37 @@ body {
 }
 
 
-.line-width {
+.line-width-slider {
+  width: 150px;
+  height: 20px;
+  margin: 5px;
+  position: relative;
   display: flex;
   align-items: center;
 }
-.line-width__line {
-  width: 100px;
-  height: 10px;
-  background-color: #fff;
-  border-radius: 9999px;
-  position: relative;
-  margin-right: 20px;
+
+.line-width-slider .line {
+  width: 70%;
+  height: 16px;
+  border-radius: 5px;
+  background: #E0E0E0;
+  background: linear-gradient(left top, #E0E0E0, #EEEEEE);
 }
-.line-width__line .marker {
+
+.line-width-slider .marker {
   width: 10px;
   height: 30px;
-  border: 1px solid black;
-  background-color: olive;
-  border-radius: 9999px;
+  border-radius: 3px;
   position: absolute;
-  left: 0;
-  top: -10px;
+  left: 0px;
+  top: -5px;
+  background: blue;
   cursor: pointer;
 }
-.line-width__number {
+.line-width-slider .number {
   width: 50px;
   height: 35px;
+  margin-left: 10px;
   background-color: #fff;
   border-radius: 12px;
   text-align: center;
@@ -185,6 +190,9 @@ body {
   font-size: 16px;
   font-family: monospace;
 }
+
+
+
 .draw-mode__settings .example {
   width: 150px;
   height: 35px;
