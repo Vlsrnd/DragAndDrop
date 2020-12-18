@@ -14,6 +14,7 @@ import { drawModeFunction } from './draw-mode-function.js';
 import { createGradient } from './create-gradient.js';
 import { selectColor } from './select-color.js';
 import { slide } from './slide-line-width.js';
+import { updateExampleLine } from './update-example-line.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
@@ -100,7 +101,8 @@ const selectColorForListener = event => {
               colorsPaletteCTX, 
               colorsExample, 
               drawModeSettings, 
-              colorsPaletteMarker)
+              colorsPaletteMarker);
+  updateExampleLine(exampleLine, drawModeSettings);
 };
 colorsPalette.parentElement.addEventListener('mousedown', event => {
   selectColorForListener(event);
@@ -114,6 +116,7 @@ const lineWidthSlider = document.querySelector('.line-width-slider');
 // const marker = lineWidthSlider.querySelector('.marker');
 const slideForListener = (event) => {
   slide(lineWidthSlider, event, drawModeSettings);
+  updateExampleLine(exampleLine, drawModeSettings);
 };
 document.addEventListener('mousedown', event => {
   if (event.target.parentElement === lineWidthSlider) {
