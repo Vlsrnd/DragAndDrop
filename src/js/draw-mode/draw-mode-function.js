@@ -1,6 +1,4 @@
-export {drawModeFunction};
-
-const drawModeFunction = (canvas, context, coordinates) => {
+export const drawModeFunction = (canvas, context, coordinates) => {
   for (let i = 0; i < coordinates.length; i++) {
     if (coordinates[i].color) {
       context.lineWidth = coordinates[i].lineWidth;

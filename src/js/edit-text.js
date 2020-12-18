@@ -1,6 +1,4 @@
-export {editText}
-
-const editText = (element) => {
+export const editText = (element) => {
   const input = element.querySelector('.element__input');
   const text = element.querySelector('.element__text');
   const btns = [...element.querySelectorAll('.element__btn')];

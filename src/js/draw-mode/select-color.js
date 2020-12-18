@@ -1,6 +1,4 @@
-export {selectColor};
-
-const selectColor = (event, canvas, context, element, settings, marker) => {
+export const selectColor = (event, canvas, context, element, settings, marker) => {
   const x = event.clientX - canvas.parentElement.offsetLeft;
   const y = event.clientY - canvas.parentElement.offsetTop;
   marker.style.left = x  - marker.clientWidth + 'px';

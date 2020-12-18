@@ -1,5 +1,3 @@
-export {resizeCanvas, repositionElements};
-
 function resizeCanvas(canvas, parentElement) {
   canvas.setAttribute('width', parentElement.clientWidth);
   canvas.setAttribute('height', parentElement.clientHeight);
@@ -14,3 +12,5 @@ function repositionElements(collection, lastSize, parentElement) {
   lastSize.width = parentElement.clientWidth;
   lastSize.height = parentElement.clientHeight;
 }
+
+export {resizeCanvas, repositionElements};

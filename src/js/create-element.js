@@ -1,6 +1,4 @@
-export {createElement};
-
-const createElement = (structure) => {
+export const createElement = (structure) => {
   const newElement = document.createElement('div');
   newElement.classList.add('element');
   newElement.dataset.func = 'element';

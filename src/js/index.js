@@ -10,11 +10,11 @@ import { editText } from './edit-text.js';
 import { removeElement } from './remove-element.js';
 import { getElementsCoordinate } from './get-elements-coordinate.js';
 import { drawLinesOnCanvas } from './draw-lines-on-canvas.js';
-import { drawModeFunction } from './draw-mode-function.js';
-import { createGradient } from './create-gradient.js';
-import { selectColor } from './select-color.js';
-import { slide } from './slide-line-width.js';
-import { updateExampleLine } from './update-example-line.js';
+import { drawModeFunction } from './draw-mode/draw-mode-function.js';
+import { createGradient } from './draw-mode/create-gradient.js';
+import { selectColor } from './draw-mode/select-color.js';
+import { slide } from './draw-mode/slide-line-width.js';
+import { updateExampleLine } from './draw-mode/update-example-line.js';
 // import '../scss/main.scss';
 
 const drawArea = document.querySelector('.draw-area'),
@@ -212,7 +212,6 @@ const addDrawModeCoordinate = event => {
   requestAnimationFrame(redraw);
 };
 const redraw = () => {
-  console.log('draw')
   drawModeFunction(canvasDraw, ctxDraw, drawModeCoordinate);
 }
 const drawModeOn = () => {
@@ -224,6 +223,15 @@ const drawModeOff = () => {
 };
 
 window.requestAnimationFrame(redraw);
+
+const drawModeExitBtn = document.querySelector('.draw-mode__settings .exit-btn');
+
+drawModeExitBtn.onclick = () => {
+  drawMode = false;
+  drawModeSettingsElement.style.top = '-40px';
+  drawArea.removeEventListener('mousedown', drawModeOn);
+  drawArea.removeEventListener('mouseup', drawModeOff);
+}
 
 instruments.addEventListener('click', event => {
   if (event.target.dataset.btn === 'draw-mode') {

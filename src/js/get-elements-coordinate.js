@@ -1,6 +1,4 @@
-export {getElementsCoordinate};
-
-const getElementsCoordinate = (collection) => {
+export const getElementsCoordinate = (collection) => {
   if (collection.length < 2) return [];
   const coordinates = [];
   collection.forEach(obj => {

@@ -1,6 +1,4 @@
-export {removeElement};
-
-const removeElement = (element, collection) => {
+export const removeElement = (element, collection) => {
   if (collection.length <= 1) return;
   const children = collection.filter(obj => obj.element === element)[0].children;
   const trash = [];

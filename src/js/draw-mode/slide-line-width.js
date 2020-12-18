@@ -1,4 +1,4 @@
-const slide = (slider, event, setting = {}) => {
+export const slide = (slider, event, setting = {}) => {
   event.preventDefault();
   const line = slider.querySelector('.line');
   const marker = slider.querySelector('.marker');
@@ -11,5 +11,3 @@ const slide = (slider, event, setting = {}) => {
   setting.lineWidth = value;
   number.value = setting.lineWidth;
 };
-
-export {slide};

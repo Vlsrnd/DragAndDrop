@@ -1,6 +1,4 @@
-export {createGradient};
-
-const createGradient = (canvas, context) => {
+export const createGradient = (canvas, context) => {
   canvas.setAttribute('width', canvas.parentElement.clientWidth);
   canvas.setAttribute('height', canvas.parentElement.clientHeight);
   const gradient = context.createLinearGradient(0,0, canvas.width, 0);

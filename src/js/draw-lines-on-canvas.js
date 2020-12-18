@@ -1,6 +1,4 @@
-export {drawLinesOnCanvas};
-
-const drawLinesOnCanvas = (canvas, context, coordinates, settings) => {
+export const drawLinesOnCanvas = (canvas, context, coordinates, settings) => {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.lineWidth = settings.lineWidth;
   context.strokeStyle = settings.color;
