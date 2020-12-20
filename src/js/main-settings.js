@@ -8,7 +8,6 @@ export const mainSettings = {
   set lineWidth(value) { 
     this._lineWidth = value;
     this.redraw();
-    // drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings);
   },
   get lineWidth() { return this._lineWidth },
 
@@ -19,12 +18,11 @@ export const mainSettings = {
   },
   get colorBG() { return this._colorBG },
 
-  _color: 'red',
-  set color(value) {
-    this._color = value;
+  _lineColor: 'red',
+  set lineColor(value) {
+    this._lineColor = value;
     this.redraw()
-    // drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings);
   },
-  get color() { return this._color },
+  get lineColor() { return this._lineColor },
   
-},
+}
