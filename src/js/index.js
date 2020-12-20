@@ -15,7 +15,9 @@ import { createGradient } from './draw-mode/create-gradient.js';
 import { selectColor } from './draw-mode/select-color.js';
 import { slide } from './draw-mode/slide-line-width.js';
 import { updateExampleLine } from './draw-mode/update-example-line.js';
+import { mainSettings } from './main-settings.js';
 // import '../scss/main.scss';
+
 
 const drawArea = document.querySelector('.draw-area'),
       drawAreaBG = document.querySelector('.draw-area__bg'),
@@ -34,34 +36,16 @@ const drawArea = document.querySelector('.draw-area'),
       elementsCollection = [],
       trashCollection = [],
       elementsCoordinate = [],
-      mainSettings = {
-        color: 'red',
-        lineWidth: 10,
-        _colorBG: '#FFF',
-        set colorBG(value) { 
-          this._colorBG = value;
-          console.log(this.colorBG);
-          drawAreaBG.style.backgroundColor = this._colorBG;
-        },
-        get colorBG() { return this._colorBG },
-        redraw: () => drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings),
-        changeProp(obj) {
-          if (!this[obj.prop]) {
-            console.log('Wrong input. Need {prop: propName, value: value}');
-            return false;
-          }
-          this[obj.prop] = obj.value
-          this.redraw();
-          return true;
-        },
-      },
       drawModeCoordinate = [],
       drawModeSettings = {
         color: '#000',
         lineWidth: 1,
       };
+
 let drawMode = false;
 
+const redrawLineForSubscriber = () => drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings);
+mainSettings.subscribe('redraw', redrawLineForSubscriber);
 
 //temporary
 window.drawAreaBG = drawAreaBG;
