@@ -108,16 +108,12 @@ body {
   position: absolute;
   top: -40px;
 }
-.colors {
-  display: flex;
-  align-items: center;
-  height: 40px;
-}
+
 .colors__palette {
   margin-right: 10px;
   height: 35px;
   border: 1px solid white;
-  /* cursor: crosshair; */
+  cursor: crosshair;
   position: relative;
 }
 .colors__palette-marker {
@@ -130,14 +126,6 @@ body {
   border: 2px solid #777;
   z-index: 10;
 }
-.colors__example {
-  width: 90px;
-  height: 35px;
-  border: 1px solid white;
-  border-radius: 12px;
-  background-color: #000;
-}
-
 
 .line-width-slider {
   width: 150px;
@@ -166,19 +154,6 @@ body {
   background: blue;
   cursor: pointer;
 }
-.line-width-slider .number {
-  width: 50px;
-  height: 35px;
-  margin-left: 10px;
-  background-color: #fff;
-  border-radius: 12px;
-  text-align: center;
-  line-height: 35px;
-  font-size: 16px;
-  font-family: monospace;
-}
-
-
 
 .draw-mode__settings .example {
   width: 150px;

@@ -96,13 +96,13 @@ colorsPalette.parentElement.addEventListener('mouseup', event => {
 })
 //line width slider
 const lineWidthSlider = document.querySelector('.line-width-slider');
-// const marker = lineWidthSlider.querySelector('.marker');
 const slideForListener = (event) => {
   slide(lineWidthSlider, event, drawModeSettings);
   updateExampleLine(exampleLine, drawModeSettings);
 };
 document.addEventListener('mousedown', event => {
   if (event.target.parentElement === lineWidthSlider) {
+    slideForListener(event);
     document.addEventListener('mousemove', slideForListener);
   }
 })
