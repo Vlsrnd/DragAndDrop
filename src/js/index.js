@@ -1,5 +1,5 @@
 'use strict';
-import {resizeCanvas, repositionElements} from './resize.js';
+import { resizeCanvas, repositionElements } from './resize.js';
 import '../css/style.css';
 import '../index.html';
 import { createElement } from './create-element.js';
@@ -20,27 +20,30 @@ import { mainSettings } from './main-settings.js';
 
 
 const drawArea = document.querySelector('.draw-area'),
-      drawAreaBG = document.querySelector('.draw-area__bg'),
-      canvasBG = document.getElementById('canvas-bg'),
-      ctxBG = canvasBG.getContext('2d'),
-      canvasDraw = document.getElementById('canvas-draw'),
-      ctxDraw = canvasDraw.getContext('2d'),
-      colorsPalette = document.getElementById('canvas-palette'),
-      colorsPaletteCTX = colorsPalette.getContext('2d'),
-      colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
-      colorsExample = document.querySelector('.colors__example'),
-      header = document.querySelector('.header'),
-      drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
-      exampleLine = document.getElementById('example-line'),
-      lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
-      elementsCollection = [],
-      trashCollection = [],
-      elementsCoordinate = [],
-      drawModeCoordinate = [],
-      drawModeSettings = {
-        color: '#000',
-        lineWidth: 1,
-      };
+  drawAreaBG = document.querySelector('.draw-area__bg'),
+  canvasBG = document.getElementById('canvas-bg'),
+  ctxBG = canvasBG.getContext('2d'),
+  canvasDraw = document.getElementById('canvas-draw'),
+  ctxDraw = canvasDraw.getContext('2d'),
+  colorsPalette = document.getElementById('canvas-palette'),
+  colorsPaletteCTX = colorsPalette.getContext('2d'),
+  colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
+  colorsExample = document.querySelector('.colors__example'),
+  header = document.querySelector('.header'),
+  drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
+  exampleLine = document.getElementById('example-line'),
+  lastDrawAreaSize = {
+    width: drawArea.clientWidth,
+    height: drawArea.clientHeight
+  },
+  elementsCollection = [],
+  trashCollection = [],
+  elementsCoordinate = [],
+  drawModeCoordinate = [],
+  drawModeSettings = {
+    color: '#000',
+    lineWidth: 1,
+  };
 
 let drawMode = false;
 
@@ -63,7 +66,6 @@ const redrawAreaComposition = () => {
   drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings);
 };
 
-
 window.addEventListener('load', () => {
   resizeCanvas(canvasBG, drawArea);
   resizeCanvas(canvasDraw, drawArea);
@@ -71,20 +73,21 @@ window.addEventListener('load', () => {
   element.ondragstart = () => false;
   drawArea.append(element);
   addToCollection(element, elementsCollection)
-  moveElement(element, 
-              {clientX: drawArea.clientWidth / 2, clientY: 10},
-              drawArea);
+  moveElement(element, {
+      clientX: drawArea.clientWidth / 2,
+      clientY: 10
+    },
+    drawArea);
   createGradient(colorsPalette, colorsPaletteCTX);
 })
 
 //drawMode settings
 //select color
 const selectColorForListener = event => {
-  selectColor(event, 
-              colorsPalette, 
-              colorsPaletteCTX, 
-              drawModeSettings, 
-              colorsPaletteMarker);
+  selectColor(event, colorsPalette,
+    colorsPaletteCTX,
+    drawModeSettings,
+    colorsPaletteMarker);
   updateExampleLine(exampleLine, drawModeSettings);
 };
 colorsPalette.parentElement.addEventListener('mousedown', event => {
@@ -112,59 +115,61 @@ document.addEventListener('mouseup', () => {
 
 //create, move
 document.addEventListener('mousedown', event => {
-  if (drawMode) return;
-  if (event.target.dataset.func === 'create'){
-    const parent = event.target.parentElement;
-    const element = createElement(htmlStructure);
-    drawArea.append(element);
-    element.ondragstart = () => false;
-    moveElement(element, event, drawArea);
-    addToCollection(element, elementsCollection, parent);
-    const moveNewElement = (event) => {
-      moveElement(element, event, drawArea)
-      redrawAreaComposition();
-    };
-    document.addEventListener('mousemove', moveNewElement);
-    document.addEventListener('mouseup', () => {
-      document.removeEventListener('mousemove', moveNewElement);
-    })
-  } else if (event.target.dataset.func === 'element') {
-    const targetElement = event.target.parentElement;
-    const moveCurrentElement = (event) => {
-      moveElement(targetElement, event, drawArea)
-      redrawAreaComposition();
-    };
-    document.addEventListener('mousemove', moveCurrentElement);
-    document.addEventListener('mouseup', () => {
-      document.removeEventListener('mousemove', moveCurrentElement);
-
-    })
-  }
-})
-//resize
-+function () {
-  window.addEventListener('resize', resizeThrottler, false);
-  let resizeTimeout;
-  function resizeThrottler() {
-    if (!resizeTimeout) {
-      resizeTimeout = setTimeout(() => {
-        resizeTimeout = null;
-        // resize handler start
-        resizeCanvas(canvasBG, drawArea);
-        resizeCanvas(canvasDraw, drawArea);
-        repositionElements(elementsCollection, lastDrawAreaSize, drawArea);
+    if (drawMode) return;
+    if (event.target.dataset.func === 'create' || event.target.dataset.btn === 'new-element') {
+      const parent = event.target.dataset.func === 'create' ? event.target.parentElement : null;
+      const element = createElement(htmlStructure);
+      drawArea.append(element);
+      element.ondragstart = () => false;
+      moveElement(element, event, drawArea);
+      addToCollection(element, elementsCollection, parent);
+      const moveNewElement = (event) => {
+        moveElement(element, event, drawArea)
         redrawAreaComposition();
-        // end
-      }, 30)
+      };
+      document.addEventListener('mousemove', moveNewElement);
+      document.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', moveNewElement);
+      })
+    } else if (event.target.dataset.func === 'element') {
+      const targetElement = event.target.parentElement;
+      const moveCurrentElement = (event) => {
+        moveElement(targetElement, event, drawArea)
+        redrawAreaComposition();
+      };
+      document.addEventListener('mousemove', moveCurrentElement);
+      document.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', moveCurrentElement);
+
+      })
     }
-  }
-}();
+  })
+  //resize
+  +
+  function () {
+    window.addEventListener('resize', resizeThrottler, false);
+    let resizeTimeout;
+
+    function resizeThrottler() {
+      if (!resizeTimeout) {
+        resizeTimeout = setTimeout(() => {
+          resizeTimeout = null;
+          // resize handler start
+          resizeCanvas(canvasBG, drawArea);
+          resizeCanvas(canvasDraw, drawArea);
+          repositionElements(elementsCollection, lastDrawAreaSize, drawArea);
+          redrawAreaComposition();
+          // end
+        }, 30)
+      }
+    }
+  }();
 //edit, remove
 document.addEventListener('click', event => {
   if (drawMode) return;
-  if (event.target.dataset.func === 'edit'){
+  if (event.target.dataset.func === 'edit') {
     editText(event.target.parentElement);
-  } else if (event.target.dataset.func === 'remove'){
+  } else if (event.target.dataset.func === 'remove') {
     const trash = removeElement(event.target.parentElement, elementsCollection);
     trashCollection.push(trash);
     redrawAreaComposition();
@@ -174,7 +179,7 @@ document.addEventListener('click', event => {
 //restore ctrl+z
 document.addEventListener('keydown', event => {
   if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey) && !drawMode) {
-    if (trashCollection.length > 0){
+    if (trashCollection.length > 0) {
       const lastTrash = trashCollection.pop();
       lastTrash.deletedElements.forEach(element => {
         element.classList.remove('hide');
@@ -191,7 +196,8 @@ document.addEventListener('keydown', event => {
 
 const addDrawModeCoordinate = event => {
   drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
-                          event.clientY - drawArea.offsetTop]);
+    event.clientY - drawArea.offsetTop
+  ]);
   requestAnimationFrame(redraw);
 };
 const redraw = () => {
