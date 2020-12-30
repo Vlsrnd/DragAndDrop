@@ -3,20 +3,24 @@ import { selectColor } from './select-color.js';
 import { updateExampleLine } from './update-example-line.js';
 import { slide } from './slide-line-width.js';
 import { createGradient } from './create-gradient.js';
+import { mainSettings } from '../main-settings.js';
 
 export const canvasDraw = document.getElementById('canvas-draw');
 
 const ctxDraw = canvasDraw.getContext('2d');
 
 export let drawMode = false;
+
 export const drawModeInit = () => {
   const colorsPaletteCanvas = document.getElementById('canvas-palette'),
   colorsPaletteCTX = colorsPaletteCanvas.getContext('2d'),
   drawArea = document.querySelector('.draw-area'),
   header = document.querySelector('.header'),
+  drawModeSettingsElement = document.querySelector('.settings'),
   colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
-  drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
   exampleLine = document.getElementById('example-line'),
+  slider = document.querySelector('.line-width-slider'),
+
   drawModeCoordinate = [],
   drawModeSettings = {
     color: '#000',
@@ -29,8 +33,7 @@ export const drawModeInit = () => {
   //
 
   createGradient(colorsPaletteCanvas, colorsPaletteCTX);
-  //drawMode settings
-  //select color
+
   const selectColorForListener = event => {
     selectColor(event, colorsPaletteCanvas,
       colorsPaletteCTX,
@@ -82,7 +85,7 @@ export const drawModeInit = () => {
 
   window.requestAnimationFrame(redraw);
 
-  const drawModeExitBtn = document.querySelector('.draw-mode__settings .exit-btn');
+  const drawModeExitBtn = document.querySelector('.settings .exit-btn');
 
   drawModeExitBtn.onclick = () => {
     drawMode = false;
@@ -93,17 +96,12 @@ export const drawModeInit = () => {
 
   header.addEventListener('click', event => {
     if (event.target.dataset.btn === 'draw-mode') {
-      if (!drawMode) {
+        mainSettings.settingsMode = 'draw-mode';
+
         drawMode = true;
         drawModeSettingsElement.style.top = '0px';
         drawArea.addEventListener('mousedown', drawModeOn);
         drawArea.addEventListener('mouseup', drawModeOff);
-      } else if (drawMode) {
-        drawMode = false;
-        drawModeSettingsElement.style.top = '-40px';
-        drawArea.removeEventListener('mousedown', drawModeOn);
-        drawArea.removeEventListener('mouseup', drawModeOff);
-      }
     }
   })
 

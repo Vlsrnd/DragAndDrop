@@ -11,7 +11,6 @@ import { removeElement } from './remove-element.js';
 import { getElementsCoordinate } from './get-elements-coordinate.js';
 import { drawLinesOnCanvas } from './draw-lines-on-canvas.js';
 import { mainSettings } from './main-settings.js';
-// import '../scss/main.scss';
 import { drawMode, drawModeInit, canvasDraw } from './draw-mode/draw-mode-init.js';
 
 const drawArea = document.querySelector('.draw-area'),

@@ -24,5 +24,5 @@ export const mainSettings = {
     this.redraw()
   },
   get lineColor() { return this._lineColor },
-  
+  settingsMode: null,
 }
