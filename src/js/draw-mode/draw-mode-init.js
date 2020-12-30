@@ -97,7 +97,8 @@ export const drawModeInit = () => {
   header.addEventListener('click', event => {
     if (event.target.dataset.btn === 'draw-mode') {
         mainSettings.settingsMode = 'draw-mode';
-
+        slider.classList.remove('hide');
+        
         drawMode = true;
         drawModeSettingsElement.style.top = '0px';
         drawArea.addEventListener('mousedown', drawModeOn);
