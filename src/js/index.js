@@ -83,7 +83,6 @@ const selectColorForListener = event => {
   selectColor(event, 
               colorsPalette, 
               colorsPaletteCTX, 
-              colorsExample, 
               drawModeSettings, 
               colorsPaletteMarker);
   updateExampleLine(exampleLine, drawModeSettings);
