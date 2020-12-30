@@ -35,7 +35,8 @@ module.exports = {
   entry: './js/index.js',
   output: {
     filename: `./js/${filename('js')}`,
-    path: path.resolve(__dirname, 'app')
+    path: path.resolve(__dirname, 'app'),
+    publicPath: '',
   },
 
   devServer: {
@@ -65,7 +66,7 @@ module.exports = {
       patterns: [
         {
           from: path.resolve(__dirname, 'src/assets'),
-          to: path.resolve(__dirname, 'app'),
+          to: path.resolve(__dirname, 'app/assets'),
         }
       ]
     }),
@@ -81,7 +82,18 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        // use: [MiniCssExtractPlugin.loader, 'css-loader']
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: (resourcePath, context) => {
+                return path.relative(path.dirname(resourcePath), context) + '/';
+              },
+            },
+          },
+          'css-loader',
+        ]
       },
       {
         test: /\.s[ac]ss$/i,
@@ -103,13 +115,15 @@ module.exports = {
         exclude: /node_modules/,
         use: ['babel-loader'],
       },
-      // {
-      //   test: /\.(?:|woff2|ttf)$/,
-      //   use: [{
-      //     loader: 'file-loader',
-      //     options: `./fonts/${filename('[ext]')}`
-      //   }]
-      // },
+      {
+        test: /\.(?:|gif|png|jpg|jpeg|svg)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: `./img/${filename('[ext]')}`
+          }
+        }],
+      },
     ]
   }
 }
