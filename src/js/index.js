@@ -29,7 +29,7 @@ const drawArea = document.querySelector('.draw-area'),
       colorsPaletteCTX = colorsPalette.getContext('2d'),
       colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
       colorsExample = document.querySelector('.colors__example'),
-      instruments = document.querySelector('.instruments'),
+      header = document.querySelector('.header'),
       drawModeSettingsElement = document.querySelector('.draw-mode__settings'),
       exampleLine = document.getElementById('example-line'),
       lastDrawAreaSize = {width: drawArea.clientWidth, height: drawArea.clientHeight},
@@ -217,7 +217,7 @@ drawModeExitBtn.onclick = () => {
   drawArea.removeEventListener('mouseup', drawModeOff);
 }
 
-instruments.addEventListener('click', event => {
+header.addEventListener('click', event => {
   if (event.target.dataset.btn === 'draw-mode') {
     if (!drawMode) {
       drawMode = true;
