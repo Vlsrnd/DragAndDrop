@@ -5,9 +5,10 @@ import { slide } from './slide-line-width.js';
 import { createGradient } from './create-gradient.js';
 import { store } from '../store/store';
 import { mainSettings } from '../store/main-settings.js';
+import { showSettings } from '../common/show-settings';
+import { hideSettings } from '../common/hide-settings';
 
 export const canvasDraw = document.getElementById('canvas-draw');
-
 const ctxDraw = canvasDraw.getContext('2d');
 
 export let drawMode = false;
@@ -17,17 +18,12 @@ export const drawModeInit = () => {
   colorsPaletteCTX = colorsPaletteCanvas.getContext('2d'),
   drawArea = document.querySelector('.draw-area'),
   header = document.querySelector('.header'),
-  drawModeSettingsElement = document.querySelector('.settings'),
+  settingsElement = document.querySelector('.settings'),
   colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
   exampleLine = document.getElementById('example-line'),
   slider = document.querySelector('.line-width-slider'),
   drawModeCoordinate = store.drawModeCoordinate,
   drawModeSettings = mainSettings.drawMode;
-
-  //temporary
-  window.drawModeCoordinate = drawModeCoordinate;
-  window.drawModeSettings = drawModeSettings;
-  //
 
   createGradient(colorsPaletteCanvas, colorsPaletteCTX);
 
@@ -88,17 +84,15 @@ export const drawModeInit = () => {
 
   drawModeExitBtn.onclick = () => {
     drawMode = false;
-    drawModeSettingsElement.style.top = '-40px';
+    hideSettings(settingsElement);
     drawArea.removeEventListener('mousedown', drawModeOn);
     drawArea.removeEventListener('mouseup', drawModeOff);
   }
 
   header.addEventListener('click', event => {
     if (event.target.dataset.btn === 'draw-mode') {
-        slider.classList.remove('hide');
-        
         drawMode = true;
-        drawModeSettingsElement.style.top = '0px';
+        showSettings(settingsElement, 'DRAW_MODE');
         drawArea.addEventListener('mousedown', drawModeOn);
         drawArea.addEventListener('mouseup', drawModeOff);
     }
