@@ -1,101 +1,27 @@
 import { drawModeFunction } from './draw-mode-function.js';
-import { selectColor } from './select-color.js';
-import { updateExampleLine } from './update-example-line.js';
-import { slide } from './slide-line-width.js';
-import { createGradient } from './create-gradient.js';
 import { store } from '../store/store';
 import { mainSettings } from '../store/main-settings.js';
-import { showSettings } from '../common/show-settings';
-import { hideSettings } from '../common/hide-settings';
-
-export const canvasDraw = document.getElementById('canvas-draw');
-const ctxDraw = canvasDraw.getContext('2d');
-
-export let drawMode = false;
-
-export const drawModeInit = () => {
-  const colorsPaletteCanvas = document.getElementById('canvas-palette'),
-  colorsPaletteCTX = colorsPaletteCanvas.getContext('2d'),
+const canvasDraw = document.getElementById('canvas-draw'),
+  ctxDraw = canvasDraw.getContext('2d'),
   drawArea = document.querySelector('.draw-area'),
-  header = document.querySelector('.header'),
-  settingsElement = document.querySelector('.settings'),
-  colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
-  exampleLine = document.getElementById('example-line'),
-  slider = document.querySelector('.line-width-slider'),
-  drawModeCoordinate = store.drawModeCoordinate,
-  drawModeSettings = mainSettings.drawMode;
+  drawModeCoordinate = store.drawModeCoordinate;
 
-  createGradient(colorsPaletteCanvas, colorsPaletteCTX);
+const redraw = () => drawModeFunction(ctxDraw, drawModeCoordinate);
+const addDrawModeCoordinate = event => {
+  drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
+    event.clientY - drawArea.offsetTop
+  ]);
+  requestAnimationFrame(redraw);
+};
+window.requestAnimationFrame(redraw);
 
-  const selectColorForListener = event => {
-    selectColor(
-      event, 
-      colorsPaletteCanvas,
-      colorsPaletteCTX,
-      drawModeSettings,
-      colorsPaletteMarker);
-    updateExampleLine(exampleLine, drawModeSettings);
-  };
-  colorsPaletteCanvas.parentElement.addEventListener('mousedown', event => {
-    selectColorForListener(event);
-    colorsPaletteCanvas.addEventListener('mousemove', selectColorForListener);
-  })
-  colorsPaletteCanvas.parentElement.addEventListener('mouseup', event => {
-    colorsPaletteCanvas.removeEventListener('mousemove', selectColorForListener);
-  })
-  //line width slider
-  const lineWidthSlider = document.querySelector('.line-width-slider');
-  const slideForListener = (event) => {
-    slide(lineWidthSlider, event, drawModeSettings);
-    updateExampleLine(exampleLine, drawModeSettings);
-  };
-  document.addEventListener('mousedown', event => {
-    if (event.target.parentElement === lineWidthSlider) {
-      slideForListener(event);
-      document.addEventListener('mousemove', slideForListener);
-    }
-  })
-  document.addEventListener('mouseup', () => {
-    document.removeEventListener('mousemove', slideForListener);
-  })
-
-  // drawmode on
-  const addDrawModeCoordinate = event => {
-    drawModeCoordinate.push([event.clientX - drawArea.offsetLeft,
-      event.clientY - drawArea.offsetTop
-    ]);
-    requestAnimationFrame(redraw);
-  };
-
-  function redraw() {
-    drawModeFunction(ctxDraw, drawModeCoordinate);
-  }
-  const drawModeOn = () => {
-    drawModeCoordinate.push(drawModeSettings);
-    drawArea.addEventListener('mousemove', addDrawModeCoordinate);
-  };
-  const drawModeOff = () => {
-    drawArea.removeEventListener('mousemove', addDrawModeCoordinate);
-  };
-
-  window.requestAnimationFrame(redraw);
-
-  const drawModeExitBtn = document.querySelector('.settings .exit-btn');
-
-  drawModeExitBtn.onclick = () => {
-    drawMode = false;
-    hideSettings(settingsElement);
-    drawArea.removeEventListener('mousedown', drawModeOn);
-    drawArea.removeEventListener('mouseup', drawModeOff);
-  }
-
-  header.addEventListener('click', event => {
-    if (event.target.dataset.btn === 'draw-mode') {
-        drawMode = true;
-        showSettings(mainSettings, settingsElement, 'DRAW');
-        drawArea.addEventListener('mousedown', drawModeOn);
-        drawArea.addEventListener('mouseup', drawModeOff);
-    }
-  })
-  //drawMode end
-}
+export const drawModeOn = () => {
+  drawModeCoordinate.push({
+    color: mainSettings.drawMode.color,
+    lineWidth: mainSettings.drawMode.lineWidth,
+  });
+  drawArea.addEventListener('mousemove', addDrawModeCoordinate);
+};
+export const drawModeOff = () => {
+  drawArea.removeEventListener('mousemove', addDrawModeCoordinate);
+};

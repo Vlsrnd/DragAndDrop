@@ -11,13 +11,14 @@ import { removeElement } from './main-element-function/remove-element.js';
 import { getElementsCoordinate } from './draw-line/get-elements-coordinate.js';
 import { drawLinesOnCanvas } from './draw-line/draw-lines-on-canvas.js';
 import { mainSettings } from './store/main-settings.js';
-import { drawMode, drawModeInit, canvasDraw } from './draw-mode/draw-mode-init.js';
 import { store } from './store/store.js';
+import { settingsInit } from './settings-functional/settings-init';
 
 const drawArea = document.querySelector('.draw-area'),
   drawAreaBG = document.querySelector('.draw-area__bg'),
   canvasBG = document.getElementById('canvas-bg'),
   ctxBG = canvasBG.getContext('2d'),
+  canvasDraw = document.getElementById('canvas-draw'),
   { elementsCollection, trashCollection, elementsCoordinate } = store;
 
 const redrawLineForSubscriber = () => drawLinesOnCanvas(canvasBG, ctxBG, elementsCoordinate, mainSettings);
@@ -47,12 +48,12 @@ window.addEventListener('load', () => {
       clientY: 10
     },
     drawArea);
-  drawModeInit();
+  settingsInit();
 })
 
 //create, move
 document.addEventListener('mousedown', event => {
-  if (drawMode) return;
+  if (mainSettings.isDrawMode) return;
   if (event.target.dataset.func === 'create' || event.target.dataset.btn === 'new-element') {
     const parent = event.target.dataset.func === 'create' ? event.target.parentElement : null;
     const element = createElement(htmlStructure);
@@ -84,7 +85,7 @@ document.addEventListener('mousedown', event => {
 
 //edit, remove
 document.addEventListener('click', event => {
-  if (drawMode) return;
+  if (mainSettings.isDrawMode) return;
   if (event.target.dataset.func === 'edit') {
     editText(event.target.parentElement);
   } else if (event.target.dataset.func === 'remove') {
@@ -96,7 +97,7 @@ document.addEventListener('click', event => {
 
 //restore ctrl+z
 document.addEventListener('keydown', event => {
-  if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey) && !drawMode) {
+  if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey) && !mainSettings.isDrawMode) {
     if (trashCollection.length > 0) {
       const lastTrash = trashCollection.pop();
       lastTrash.deletedElements.forEach(element => {

@@ -30,6 +30,7 @@ export const mainSettings = {
       color: '#000',
       lineWidth: 1,
   },
-
+  isDrawMode: false,
+  
   settingsMode: null,
 }
