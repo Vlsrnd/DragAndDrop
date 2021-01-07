@@ -1,20 +1,17 @@
-const DRAW_MODE = 'DRAW_MODE';
-const BG_MODE = 'BG_MODE';
-const LINE_MODE = 'LINE_MODE';
-
-export const showSettings = (settingsElement, mode) => {
+export const showSettings = (settings, settingsElement, mode) => {
   const switcher = settingsElement.querySelector('.settings-switch__mode');
   const lineWidthSlider = settingsElement.querySelector('.line-width-slider');
+  settings.settingsMode = mode;
   switch (mode) {
-    case DRAW_MODE:
+    case 'DRAW':
       switcher.classList.add('hide');
       lineWidthSlider.classList.remove('hide');
       break;
-    case BG_MODE:
+    case 'BG':
       switcher.classList.remove('hide');
       lineWidthSlider.classList.add('hide');
       break;
-    case LINE_MODE:
+    case 'LINE':
       switcher.classList.remove('hide');
       lineWidthSlider.classList.remove('hide');
       break;

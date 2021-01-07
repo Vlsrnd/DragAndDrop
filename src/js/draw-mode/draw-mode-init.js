@@ -92,7 +92,7 @@ export const drawModeInit = () => {
   header.addEventListener('click', event => {
     if (event.target.dataset.btn === 'draw-mode') {
         drawMode = true;
-        showSettings(settingsElement, 'DRAW_MODE');
+        showSettings(mainSettings, settingsElement, 'DRAW');
         drawArea.addEventListener('mousedown', drawModeOn);
         drawArea.addEventListener('mouseup', drawModeOff);
     }
