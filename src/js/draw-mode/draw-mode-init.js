@@ -3,6 +3,7 @@ import { selectColor } from './select-color.js';
 import { updateExampleLine } from './update-example-line.js';
 import { slide } from './slide-line-width.js';
 import { createGradient } from './create-gradient.js';
+import { store } from '../store/store';
 import { mainSettings } from '../store/main-settings.js';
 
 export const canvasDraw = document.getElementById('canvas-draw');
@@ -20,12 +21,8 @@ export const drawModeInit = () => {
   colorsPaletteMarker = document.querySelector('.colors__palette-marker'),
   exampleLine = document.getElementById('example-line'),
   slider = document.querySelector('.line-width-slider'),
-
-  drawModeCoordinate = [],
-  drawModeSettings = {
-    color: '#000',
-    lineWidth: 1,
-  };
+  drawModeCoordinate = store.drawModeCoordinate,
+  drawModeSettings = mainSettings.drawMode;
 
   //temporary
   window.drawModeCoordinate = drawModeCoordinate;
@@ -35,7 +32,9 @@ export const drawModeInit = () => {
   createGradient(colorsPaletteCanvas, colorsPaletteCTX);
 
   const selectColorForListener = event => {
-    selectColor(event, colorsPaletteCanvas,
+    selectColor(
+      event, 
+      colorsPaletteCanvas,
       colorsPaletteCTX,
       drawModeSettings,
       colorsPaletteMarker);
