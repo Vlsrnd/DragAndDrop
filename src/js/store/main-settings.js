@@ -2,6 +2,7 @@ export const mainSettings = {
   subscribe(name, callback) {
     this[name] = callback;
   },
+
   redraw: null,
 
   _lineWidth: 10,
@@ -24,5 +25,5 @@ export const mainSettings = {
     this.redraw()
   },
   get lineColor() { return this._lineColor },
-  settingsMode: null,
+
 }

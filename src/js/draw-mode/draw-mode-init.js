@@ -3,7 +3,7 @@ import { selectColor } from './select-color.js';
 import { updateExampleLine } from './update-example-line.js';
 import { slide } from './slide-line-width.js';
 import { createGradient } from './create-gradient.js';
-import { mainSettings } from '../main-settings.js';
+import { mainSettings } from '../store/main-settings.js';
 
 export const canvasDraw = document.getElementById('canvas-draw');
 
@@ -96,7 +96,6 @@ export const drawModeInit = () => {
 
   header.addEventListener('click', event => {
     if (event.target.dataset.btn === 'draw-mode') {
-        mainSettings.settingsMode = 'draw-mode';
         slider.classList.remove('hide');
         
         drawMode = true;
@@ -105,6 +104,5 @@ export const drawModeInit = () => {
         drawArea.addEventListener('mouseup', drawModeOff);
     }
   })
-
   //drawMode end
 }
