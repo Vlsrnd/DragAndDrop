@@ -1,9 +1,9 @@
-function resizeCanvas(canvas, parentElement) {
+export const resizeCanvas = (canvas, parentElement) => {
   canvas.setAttribute('width', parentElement.clientWidth);
   canvas.setAttribute('height', parentElement.clientHeight);
-}
+};
 
-function repositionElements(collection, lastSize, parentElement) {
+export const repositionElements = (collection, lastSize, parentElement) => {
   collection.forEach(obj => {
     const element = obj.element;
     element.style.left = element.offsetLeft * (parentElement.clientWidth / lastSize.width) + 'px';
@@ -11,6 +11,4 @@ function repositionElements(collection, lastSize, parentElement) {
   })
   lastSize.width = parentElement.clientWidth;
   lastSize.height = parentElement.clientHeight;
-}
-
-export {resizeCanvas, repositionElements};
+};
