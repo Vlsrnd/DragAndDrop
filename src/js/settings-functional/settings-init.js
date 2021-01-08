@@ -64,6 +64,9 @@ export const settingsInit = () => {
     drawArea.removeEventListener('mouseup', drawModeOff);
   };
 
+  const btnBG = document.querySelector(`div[data-btn='BG-settings']`);
+  const btnLINE = document.querySelector(`div[data-btn='LINE-settings']`);
+
   header.addEventListener('click', event => {
     switch (event.target.dataset.btn) {
       case 'draw-mode':
@@ -74,9 +77,13 @@ export const settingsInit = () => {
         break;
       case 'settings':
       case 'BG-settings':
+        btnBG.classList.add('settings-switch__mode-active');
+        btnLINE.classList.remove('settings-switch__mode-active');
         showSettings(mainSettings, settingsElement, 'BG');
         break;
       case 'LINE-settings':
+        btnBG.classList.remove('settings-switch__mode-active');
+        btnLINE.classList.add('settings-switch__mode-active');
         showSettings(mainSettings, settingsElement, 'LINE');
         break;
       default:
