@@ -115,10 +115,6 @@ document.addEventListener('keydown', event => {
 });
 
 //resize
-const lastDrawAreaSize = {
-  width: drawArea.clientWidth,
-  height: drawArea.clientHeight
-};
 +function () {
   window.addEventListener('resize', resizeThrottler, false);
   let resizeTimeout;
@@ -130,7 +126,7 @@ const lastDrawAreaSize = {
         // resize handler start
         resizeCanvas(canvasBG, drawArea);
         resizeCanvas(canvasDraw, drawArea);
-        repositionElements(elementsCollection, lastDrawAreaSize, drawArea);
+        repositionElements(elementsCollection, mainSettings.drawAreaSize, drawArea);
         redrawAreaComposition();
         // end
       }, 30)

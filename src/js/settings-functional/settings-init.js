@@ -17,6 +17,9 @@ export const settingsInit = () => {
     example = document.querySelector('.example'),
     exampleLine = example.querySelector('.example__line');
 
+  mainSettings.drawAreaSize.width = drawArea.clientWidth;
+  mainSettings.drawAreaSize.height = drawArea.clientHeight;
+
   createGradient(colorsPaletteCanvas, colorsPaletteCTX);
 
   const selectColorForListener = event => {

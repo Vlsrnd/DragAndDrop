@@ -32,5 +32,10 @@ export const mainSettings = {
   },
   isDrawMode: false,
   
+  drawAreaSize: {
+    width: null,
+    height: null,
+  },
+
   settingsMode: null,
 }

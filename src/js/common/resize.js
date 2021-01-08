@@ -4,6 +4,7 @@ export const resizeCanvas = (canvas, parentElement) => {
 };
 
 export const repositionElements = (collection, lastSize, parentElement) => {
+  if (lastSize.width === null) debugger
   collection.forEach(obj => {
     const element = obj.element;
     element.style.left = element.offsetLeft * (parentElement.clientWidth / lastSize.width) + 'px';
