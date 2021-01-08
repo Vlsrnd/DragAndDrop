@@ -27,7 +27,7 @@ export const mainSettings = {
   get lineColor() { return this._lineColor },
 
   drawMode: {
-      color: '#000',
+      lineColor: '#000',
       lineWidth: 1,
   },
   isDrawMode: false,

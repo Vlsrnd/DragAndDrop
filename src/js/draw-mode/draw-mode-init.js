@@ -17,7 +17,7 @@ window.requestAnimationFrame(redraw);
 
 export const drawModeOn = () => {
   drawModeCoordinate.push({
-    color: mainSettings.drawMode.color,
+    color: mainSettings.drawMode.lineColor,
     lineWidth: mainSettings.drawMode.lineWidth,
   });
   drawArea.addEventListener('mousemove', addDrawModeCoordinate);

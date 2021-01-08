@@ -3,7 +3,7 @@ export const updateExampleLine = (example, exampleLine, settings) => {
     case 'DRAW':
     case 'LINE':
       let settingsSource = settings.settingsMode === 'DRAW' ? settings.drawMode : settings;
-      exampleLine.style.borderColor = settingsSource.color;
+      exampleLine.style.borderColor = settingsSource.lineColor;
       exampleLine.style.borderWidth = settingsSource.lineWidth + 'px';
       exampleLine.style.transform = `translateY(-${settingsSource.lineWidth / 2}px)`
       break;
