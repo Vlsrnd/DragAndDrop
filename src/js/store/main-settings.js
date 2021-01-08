@@ -5,7 +5,7 @@ export const mainSettings = {
 
   redraw: null,
 
-  _lineWidth: 10,
+  _lineWidth: 1,
   set lineWidth(value) { 
     this._lineWidth = value;
     this.redraw();

@@ -2,9 +2,10 @@ export const updateExampleLine = (example, exampleLine, settings) => {
   switch (settings.settingsMode) {
     case 'DRAW':
     case 'LINE':
-      exampleLine.style.borderColor = settings.drawMode.color;
-      exampleLine.style.borderWidth = settings.drawMode.lineWidth + 'px';
-      exampleLine.style.transform = `translateY(-${settings.drawMode.lineWidth / 2}px)`
+      let settingsSource = settings.settingsMode === 'DRAW' ? settings.drawMode : settings;
+      exampleLine.style.borderColor = settingsSource.color;
+      exampleLine.style.borderWidth = settingsSource.lineWidth + 'px';
+      exampleLine.style.transform = `translateY(-${settingsSource.lineWidth / 2}px)`
       break;
     case 'BG':
       example.style.backgroundColor = settings.colorBG;
