@@ -5,7 +5,7 @@ export const mainSettings = {
 
   redraw: null,
 
-  _lineWidth: 10,
+  _lineWidth: 1,
   set lineWidth(value) { 
     this._lineWidth = value;
     this.redraw();
@@ -27,10 +27,15 @@ export const mainSettings = {
   get lineColor() { return this._lineColor },
 
   drawMode: {
-      color: '#000',
+      lineColor: '#000',
       lineWidth: 1,
   },
   isDrawMode: false,
   
+  drawAreaSize: {
+    width: null,
+    height: null,
+  },
+
   settingsMode: null,
 }

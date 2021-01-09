@@ -8,7 +8,7 @@ export const selectColor = (event, canvas, context, settings, marker) => {
   const color = `rgba(${r}, ${g}, ${b}, ${a})`;
   switch (settings.settingsMode) {
     case 'DRAW':
-      settings.drawMode.color = color;
+      settings.drawMode.lineColor = color;
       break;
     case 'BG':
       settings.colorBG = color;

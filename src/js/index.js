@@ -13,8 +13,11 @@ import { drawLinesOnCanvas } from './draw-line/draw-lines-on-canvas.js';
 import { mainSettings } from './store/main-settings.js';
 import { store } from './store/store.js';
 import { settingsInit } from './settings-functional/settings-init';
+import { hideSettings } from './settings-functional/hide-settings';
+import { drawModeOff, drawModeOn } from './draw-mode/draw-mode-init.js';
 
 const drawArea = document.querySelector('.draw-area'),
+  settingsElement = document.querySelector('.settings'),
   drawAreaBG = document.querySelector('.draw-area__bg'),
   canvasBG = document.getElementById('canvas-bg'),
   ctxBG = canvasBG.getContext('2d'),
@@ -112,10 +115,6 @@ document.addEventListener('keydown', event => {
 });
 
 //resize
-const lastDrawAreaSize = {
-  width: drawArea.clientWidth,
-  height: drawArea.clientHeight
-};
 +function () {
   window.addEventListener('resize', resizeThrottler, false);
   let resizeTimeout;
@@ -127,10 +126,19 @@ const lastDrawAreaSize = {
         // resize handler start
         resizeCanvas(canvasBG, drawArea);
         resizeCanvas(canvasDraw, drawArea);
-        repositionElements(elementsCollection, lastDrawAreaSize, drawArea);
+        repositionElements(elementsCollection, mainSettings.drawAreaSize, drawArea);
         redrawAreaComposition();
         // end
       }, 30)
     }
   }
 }();
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    mainSettings.isDrawMode = false;
+    drawArea.removeEventListener('mousedown', drawModeOn);
+    drawArea.removeEventListener('mouseup', drawModeOff);
+    hideSettings(settingsElement);
+  }
+});
