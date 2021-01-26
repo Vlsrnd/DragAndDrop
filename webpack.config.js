@@ -35,7 +35,7 @@ module.exports = {
   entry: './js/index.js',
   output: {
     filename: `./js/${filename('js')}`,
-    path: path.resolve(__dirname, 'app'),
+    path: path.resolve(__dirname, 'build'),
     publicPath: '',
   },
 
